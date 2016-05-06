@@ -9,6 +9,18 @@ left_stand = nil
 down_step1 = nil
 down_step2 = nil
 
+background = {
+	{1,2,2,2,2,2,2,2,2,3},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{4,5,5,5,5,5,5,5,5,6},
+	{7,8,8,8,8,8,8,8,8,9},
+}
+
 function love.load(arg)
 	player.img = love.graphics.newImage('assets/link.png')
 	player.img:setFilter("linear", "nearest")
@@ -21,6 +33,19 @@ function love.load(arg)
 	down_step1 = love.graphics.newQuad(90, 0, 12, 16, player.img:getDimensions())
 	down_step2 = love.graphics.newQuad(104, 0, 12, 16, player.img:getDimensions())
 	player.quad = down_step1
+
+	grass = love.graphics.newImage('assets/grass.png')
+	grass:setFilter("linear", "nearest")
+	grass_w, grass_h = grass:getWidth(), grass:getHeight()
+	local quadinfo = {
+		{0,  0}, {17,  0}, {34,  0},
+		{0, 17}, {17, 17}, {34, 17},
+		{0, 34}, {17, 34}, {34, 34},
+	}
+	grass_quads = {}
+	for i, qi in ipairs(quadinfo) do
+		grass_quads[i] = love.graphics.newQuad(qi[1], qi[2], 16, 16, grass_w, grass_h)
+	end
 end
 
 
@@ -94,5 +119,12 @@ end
 
 
 function love.draw(dt)
+	for i, row in ipairs(background) do
+		for j, num in ipairs(row) do
+			local x, y = (j-1)*16*scale, (i-1)*16*scale
+			love.graphics.draw(grass, grass_quads[num], x, y, 0, 4, 4)
+		end
+	end
+
 	love.graphics.draw(player.img, player.quad, player.x, player.y, 0, 4, 4)
 end
