@@ -63,7 +63,7 @@ function love.update(dt)
 	_, _, width, height = player.quad:getViewport()
 	dx, dy = 0, 0
 	oldquad = player.quad
-	if love.keyboard.isDown('down','d') then
+	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
 		if player.y < (love.graphics.getHeight() - height*scale) then
 			dy = player.speed * dt
 			if dtotal < 0.125 then
@@ -73,7 +73,7 @@ function love.update(dt)
 			end
 		end
 	end
-	if love.keyboard.isDown('up','e') then
+	if love.keyboard.isDown('up','e') and not love.keyboard.isDown('down','d') then
 		if player.y > 0 then
 			dy = -player.speed * dt
 			if dtotal < 0.125 then
@@ -83,7 +83,7 @@ function love.update(dt)
 			end
 		end
 	end
-	if love.keyboard.isDown('left','s') then
+	if love.keyboard.isDown('left','s') and not love.keyboard.isDown('right','f') then
 		if player.x > 0 then
 			dx = -player.speed * dt
 			if dtotal < 0.125 then
@@ -93,7 +93,7 @@ function love.update(dt)
 			end
 		end
 	end
-	if love.keyboard.isDown('right','f') then
+	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
 		if player.x < (love.graphics.getWidth() - width*scale) then
 			dx = player.speed * dt
 			if dtotal < 0.125 then
@@ -102,10 +102,6 @@ function love.update(dt)
 				player.quad = right_step
 			end
 		end
-	end
-
-	if dx == dy == 0 then
-		player.quad = oldquad
 	end
 
 	if dx ~= 0 and dy ~= 0 then
