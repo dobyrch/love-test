@@ -30,8 +30,8 @@ function love.load(arg)
 	right_step = love.graphics.newQuad(44, 0, 13, 16, player.img:getDimensions())
 	left_step = love.graphics.newQuad(59, 0, 13, 16, player.img:getDimensions())
 	left_stand = love.graphics.newQuad(74, 0, 14, 16, player.img:getDimensions())
-	down_step1 = love.graphics.newQuad(90, 0, 12, 16, player.img:getDimensions())
-	down_step2 = love.graphics.newQuad(104, 0, 12, 16, player.img:getDimensions())
+	down_step1 = love.graphics.newQuad(89, 0, 14, 16, player.img:getDimensions())
+	down_step2 = love.graphics.newQuad(103, 0, 14, 16, player.img:getDimensions())
 	player.quad = down_step1
 
 	grass = love.graphics.newImage('assets/grass.png')
