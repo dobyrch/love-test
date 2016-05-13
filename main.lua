@@ -56,8 +56,8 @@ dtotal = 0
 fq = 1
 function love.update(dt)
 	dtotal = dtotal + dt
-	if dtotal >= 0.25 then
-		dtotal = dtotal - 0.25
+	if dtotal >= 0.40 then
+		dtotal = dtotal - 0.40
 
 		fq = fq%4 + 1
 	end
