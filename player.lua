@@ -26,6 +26,67 @@ function Player:init(scale)
 	self.quad = down_step1
 end
 
+local dtotal = 0
+function Player:update(dt)
+	dtotal = dtotal + dt
+	if dtotal >= 0.25 then
+		dtotal = dtotal - 0.25
+	end
+
+	_, _, width, height = self.quad:getViewport()
+	dx, dy = 0, 0
+	oldquad = self.quad
+	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
+		if self.y < (love.graphics.getHeight() - height*scale) then
+			dy = self.speed * dt
+			if dtotal < 0.125 then
+				self.quad = down_step1
+			else
+				self.quad = down_step2
+			end
+		end
+	end
+	if love.keyboard.isDown('up','e') and not love.keyboard.isDown('down','d') then
+		if self.y > 0 then
+			dy = -self.speed * dt
+			if dtotal < 0.125 then
+				self.quad = up_step1
+			else
+				self.quad = up_step2
+			end
+		end
+	end
+	if love.keyboard.isDown('left','s') and not love.keyboard.isDown('right','f') then
+		if self.x > 0 then
+			dx = -self.speed * dt
+			if dtotal < 0.125 then
+				self.quad = left_stand
+			else
+				self.quad = left_step
+			end
+		end
+	end
+	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
+		if self.x < (love.graphics.getWidth() - width*scale) then
+			dx = self.speed * dt
+			if dtotal < 0.125 then
+				self.quad = right_stand
+			else
+				self.quad = right_step
+			end
+		end
+	end
+
+	if dx ~= 0 and dy ~= 0 then
+		dx = dx / math.sqrt(2)
+		dy = dy / math.sqrt(2)
+	end
+
+	self.x = self.x + dx
+	self.y = self.y + dy
+end
+
+
 function Player:draw()
 	love.graphics.draw(self.img, self.quad, self.x, self.y, 0, 4, 4)
 end
