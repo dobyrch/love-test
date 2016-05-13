@@ -39,9 +39,7 @@ end
 
 function Player:update(dt)
 	self.time = self.time + dt
-	if self.time >= 0.25 then
-		self.time = self.time - 0.25
-	end
+	self.time = self.time % 0.25
 
 	_, _, width, height = self.quad:getViewport()
 	dx, dy = 0, 0
