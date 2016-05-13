@@ -1,5 +1,6 @@
+require('player')
+
 scale = 4
-player = { x = 70*scale, y = 70*scale, speed = 60*scale, img = nil, quad = nil}
 up_step1 = nil
 up_step2 = nil
 right_stand = nil
@@ -22,17 +23,8 @@ background = {
 }
 
 function love.load(arg)
-	player.img = love.graphics.newImage('assets/link.png')
-	player.img:setFilter('linear', 'nearest')
-	up_step1 = love.graphics.newQuad(0, 0, 12, 16, player.img:getDimensions())
-	up_step2 = love.graphics.newQuad(14, 0, 12, 16, player.img:getDimensions())
-	right_stand = love.graphics.newQuad(28, 0, 14, 16, player.img:getDimensions())
-	right_step = love.graphics.newQuad(44, 0, 13, 16, player.img:getDimensions())
-	left_step = love.graphics.newQuad(59, 0, 13, 16, player.img:getDimensions())
-	left_stand = love.graphics.newQuad(74, 0, 14, 16, player.img:getDimensions())
-	down_step1 = love.graphics.newQuad(89, 0, 14, 16, player.img:getDimensions())
-	down_step2 = love.graphics.newQuad(103, 0, 14, 16, player.img:getDimensions())
-	player.quad = down_step1
+	player = Player:new()
+	player:init(scale)
 
 	grass = love.graphics.newImage('assets/grass.png')
 	grass:setFilter('linear', 'nearest')
@@ -140,5 +132,6 @@ function love.draw(dt)
 		end
 	end
 
-	love.graphics.draw(player.img, player.quad, player.x, player.y, 0, 4, 4)
+
+	player:draw()
 end
