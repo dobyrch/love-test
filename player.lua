@@ -1,5 +1,14 @@
 Player = { time=0 }
 
+local up_step1
+local up_step2
+local right_stand
+local right_step
+local left_step
+local left_stand
+local down_step1
+local down_step2
+
 function Player:new()
 	instance = {}
 	setmetatable(instance, self)

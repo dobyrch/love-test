@@ -1,14 +1,6 @@
 require 'player'
 
 scale = 4
-up_step1 = nil
-up_step2 = nil
-right_stand = nil
-right_step = nil
-left_step = nil
-left_stand = nil
-down_step1 = nil
-down_step2 = nil
 
 background = {
 	{1,2,2,2,2,2,2,2,2,3},
