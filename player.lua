@@ -1,4 +1,4 @@
-Player = { time=0 }
+Player = {time=0}
 
 local up_step1
 local up_step2
@@ -8,6 +8,7 @@ local left_step
 local left_stand
 local down_step1
 local down_step2
+
 
 function Player:new()
 	instance = {}
@@ -34,6 +35,7 @@ function Player:init(scale)
 	down_step2 = love.graphics.newQuad(103, 0, 14, 16, self.img:getDimensions())
 	self.quad = down_step1
 end
+
 
 function Player:update(dt)
 	self.time = self.time + dt
