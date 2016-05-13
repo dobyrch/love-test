@@ -1,4 +1,4 @@
-require('player')
+require 'player'
 
 scale = 4
 up_step1 = nil
