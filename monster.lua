@@ -48,9 +48,9 @@ end
 
 function Monster:update(dt)
 	self.time = self.time + dt
-	while self.time > 0.2 do
+	while self.time > 0.125 do
 		self.steps = self.steps + 1
-		self.time = self.time - 0.2
+		self.time = self.time - 0.125
 
 		if self.steps < 0 then
 			break
@@ -64,8 +64,8 @@ function Monster:update(dt)
 			end
 		end
 
-		if self.steps > 4 or self.steps > 0 and love.math.random() < 0.15 then
-			self.steps = -2
+		if self.steps > 6 or self.steps > 1 and love.math.random() < 0.15 then
+			self.steps = -3
 			self.q = love.math.random(4) * 2
 		end
 	end
