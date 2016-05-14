@@ -1,5 +1,6 @@
-require 'player'
 require 'background'
+require 'monster'
+require 'player'
 
 scale = 4
 
@@ -16,14 +17,16 @@ tiles = {
 }
 
 function love.load(arg)
-	player = Player:new()
 	background = Background:new(tiles)
+	player = Player:new()
+	monster = Monster:new()
 end
 
 
 function love.update(dt)
 	background:update(dt)
 	player:update(dt)
+	monster:update(dt)
 
 	if love.keyboard.isDown('q') then
 		love.event.push('quit')
@@ -35,4 +38,5 @@ end
 function love.draw(dt)
 	background:draw()
 	player:draw()
+	monster:draw()
 end
