@@ -37,6 +37,6 @@ end
 
 function love.draw(dt)
 	background:draw()
-	player:draw()
 	monster:draw()
+	player:draw()
 end

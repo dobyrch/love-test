@@ -17,6 +17,7 @@ function Monster:new()
 
 	self.x = 30 * scale
 	self.y = 30 * scale
+	self.speed = 30 * scale
 
 	self.img = love.graphics.newImage('assets/octorok.png')
 	self.img:setFilter('linear', 'nearest')
@@ -29,16 +30,72 @@ function Monster:new()
 	self.quads[7] = love.graphics.newQuad(108, 0, 16, 16, self.img:getDimensions())
 	self.quads[8] = love.graphics.newQuad(125, 0, 16, 16, self.img:getDimensions())
 	self.q = 1
-	
+	self.steps = 0
+
 	return instance
+end
+
+
+function Monster:inBounds()
+	local width, height
+	_, _, width, height = self.quads[self.q]:getViewport()
+
+	return self.x > 0 and self.y > 0 and
+		self.x < (love.graphics.getWidth() - height*scale) and
+		self.y < (love.graphics.getHeight() - height*scale)
 end
 
 
 function Monster:update(dt)
 	self.time = self.time + dt
-	while self.time > 1 do
-		self.q = self.q % 8 + 1
-		self.time = self.time - 1
+	while self.time > 0.2 do
+		self.steps = self.steps + 1
+		self.time = self.time - 0.2
+
+		if self.steps < 0 then
+			break
+		end
+
+		if self:inBounds() then
+			if self.q % 2 == 0 then
+				self.q = self.q - 1
+			else
+				self.q = self.q + 1
+			end
+		end
+
+		if self.steps > 4 or self.steps > 0 and love.math.random() < 0.15 then
+			self.steps = -2
+			self.q = love.math.random(4) * 2
+		end
+	end
+
+	local xdir, ydir
+	if self.q > 6 then
+		xdir = 1
+		ydir = 0
+	elseif self.q > 4 then
+		xdir = 0
+		ydir = -1
+	elseif self.q > 2 then
+		xdir = 0
+		ydir = 1
+	else
+		xdir = -1
+		ydir = 0
+	end
+
+	if self:inBounds() and self.steps >= 0 then
+		self.x = self.x + self.speed*dt*xdir
+		self.y = self.y + self.speed*dt*ydir
+
+	end
+
+	if not self:inBounds() then
+		self.x = self.x - self.speed*dt*xdir
+		self.y = self.y - self.speed*dt*ydir
+		self.steps = 0
+		self.q = love.math.random(4) * 2
 	end
 end
 
