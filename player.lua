@@ -51,8 +51,8 @@ function Player:bump(dt)
 	xmag = (1 / mag)*(cx - mcx)
 	ymag = (1 / mag)*(cy - mcy)
 
-	self.x = self.x + dt*xmag*scale*self.speed/3
-	self.y = self.y + dt*ymag*scale*self.speed/3
+	self.x = self.x + dt*xmag*self.speed*4/3
+	self.y = self.y + dt*ymag*self.speed*4/3
 
 	self.time = self.time + dt
 	if self.time > 0.2 then
@@ -132,6 +132,8 @@ function Player:draw()
 
 end
 
+-- TODO: check if both entities are collidable (probably should also rename this to collides)
+-- TODO: allow caller to pass # of pixels of leeway
 function Player:intersects(o)
 	local _, _, w, h = self.quad:getViewport()
 	local _, _, ow, oh = o.quad:getViewport()
