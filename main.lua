@@ -17,8 +17,6 @@ tiles = {
 
 function love.load(arg)
 	player = Player:new()
-	player:init(scale)
-
 	background = Background:new(tiles)
 end
 

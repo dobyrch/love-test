@@ -14,11 +14,7 @@ function Player:new()
 	instance = {}
 	setmetatable(instance, self)
 	self.__index = self
-	return instance
-end
 
-
-function Player:init(scale)
 	self.x = 70 * scale
 	self.y = 70 * scale
 	self.speed = 60 * scale
@@ -34,6 +30,8 @@ function Player:init(scale)
 	down_step1 = love.graphics.newQuad(89, 0, 14, 16, self.img:getDimensions())
 	down_step2 = love.graphics.newQuad(103, 0, 14, 16, self.img:getDimensions())
 	self.quad = down_step1
+
+	return instance
 end
 
 
