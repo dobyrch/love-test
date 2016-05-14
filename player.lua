@@ -35,7 +35,41 @@ function Player:new()
 end
 
 
+function Player:bump(dt)
+	-- TODO: store height and width when quads first created
+	-- TODO: give every entity a center() method
+	local _, _, w, h = self.quad:getViewport()
+	local _, _, mw, mh = monster.quad:getViewport()
+	local cx, cy, mcx, mcy, mag, xmag, ymag
+
+	cx = self.x + w/2
+	cy = self.y + h/2
+	mcx = monster.x + mw/2
+	mcy = monster.y + mh/2
+
+	mag = math.sqrt((cx - mcx)^2 + (cy - mcy)^2)
+	xmag = (1 / mag)*(cx - mcx)
+	ymag = (1 / mag)*(cy - mcy)
+
+	self.x = self.x + dt*xmag*scale*self.speed/3
+	self.y = self.y + dt*ymag*scale*self.speed/3
+
+	self.time = self.time + dt
+	if self.time > 0.2 then
+		self.time = 0
+		self.action = 'walk'
+	end
+end
+
+
 function Player:update(dt)
+	-- TODO: add table of actions
+	-- TODO: refactor update() to call current action
+	if self.action == 'bump' then
+		self:bump(dt)
+		return
+	end
+
 	self.time = self.time + dt
 	self.time = self.time % 0.25
 

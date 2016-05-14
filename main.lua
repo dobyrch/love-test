@@ -29,9 +29,10 @@ function love.update(dt)
 	monster:update(dt)
 
 	if player:intersects(monster) then
-		print('X')
-	else
-		print('O')
+		-- TODO: add method for switching state that takes care
+		-- of stuff like setting up the internal timer
+		player.action = 'bump'
+		player.time = 0
 	end
 
 	if love.keyboard.isDown('q') then
