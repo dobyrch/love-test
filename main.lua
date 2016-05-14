@@ -28,6 +28,12 @@ function love.update(dt)
 	player:update(dt)
 	monster:update(dt)
 
+	if player:intersects(monster) then
+		print('X')
+	else
+		print('O')
+	end
+
 	if love.keyboard.isDown('q') then
 		love.event.push('quit')
 	end

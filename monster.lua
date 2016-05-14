@@ -97,6 +97,8 @@ function Monster:update(dt)
 		self.steps = 0
 		self.q = love.math.random(4) * 2
 	end
+
+	self.quad = self.quads[self.q]
 end
 
 function Monster:draw()

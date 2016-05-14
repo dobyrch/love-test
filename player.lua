@@ -97,3 +97,19 @@ function Player:draw()
 	love.graphics.draw(self.img, self.quad, self.x, self.y, 0, scale, scale)
 
 end
+
+function Player:intersects(o)
+	local _, _, w, h = self.quad:getViewport()
+	local _, _, ow, oh = o.quad:getViewport()
+	w = w * scale
+	h = h * scale
+	ow = ow * scale
+	oh = oh * scale
+
+	return not (
+		self.x > o.x + ow or
+		o.x > self.x + w or
+		self.y > o.y + oh or
+		o.y > self.y + h
+	)
+end
