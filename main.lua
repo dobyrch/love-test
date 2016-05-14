@@ -2,8 +2,6 @@ require 'background'
 require 'monster'
 require 'player'
 
-scale = 4
-
 tiles = {
 	{1,2,2,2,2,2,2,2,2,3},
 	{4,5,5,0,5,5,0,5,5,6},
@@ -43,6 +41,7 @@ end
 
 
 function love.draw(dt)
+	love.graphics.scale(4, 4)
 	background:draw()
 	monster:draw()
 	player:draw()

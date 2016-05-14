@@ -15,9 +15,9 @@ function Monster:new()
 	setmetatable(instance, self)
 	self.__index = self
 
-	self.x = 30 * scale
-	self.y = 30 * scale
-	self.speed = 30 * scale
+	self.x = 30
+	self.y = 30
+	self.speed = 30
 
 	self.img = love.graphics.newImage('assets/octorok.png')
 	self.img:setFilter('linear', 'nearest')
@@ -41,8 +41,8 @@ function Monster:inBounds()
 	_, _, width, height = self.quads[self.q]:getViewport()
 
 	return self.x > 0 and self.y > 0 and
-		self.x < love.graphics.getWidth() - height*scale and
-		self.y < love.graphics.getHeight() - height*scale
+		self.x < love.graphics.getWidth() - height and
+		self.y < love.graphics.getHeight() - height
 end
 
 
@@ -102,5 +102,5 @@ function Monster:update(dt)
 end
 
 function Monster:draw()
-	love.graphics.draw(self.img, self.quads[self.q], self.x, self.y, 0, scale, scale)
+	love.graphics.draw(self.img, self.quads[self.q], self.x, self.y)
 end

@@ -25,11 +25,11 @@ end
 function Background:draw()
 	for i, row in ipairs(self.tiles) do
 		for j, num in ipairs(row) do
-			local x, y = (j-1)*16*scale, (i-1)*16*scale
+			local x, y = (j-1)*16, (i-1)*16
 			if num == 0 then
-				love.graphics.draw(flowers, flower_quads[self.fq], x, y, 0, scale, scale)
+				love.graphics.draw(flowers, flower_quads[self.fq], x, y)
 			else
-				love.graphics.draw(grass, grass_quads[num], x, y, 0, scale, scale)
+				love.graphics.draw(grass, grass_quads[num], x, y, 0)
 			end
 		end
 	end

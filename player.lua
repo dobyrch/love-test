@@ -15,9 +15,9 @@ function Player:new()
 	setmetatable(instance, self)
 	self.__index = self
 
-	self.x = 70 * scale
-	self.y = 70 * scale
-	self.speed = 60 * scale
+	self.x = 70
+	self.y = 70
+	self.speed = 60
 
 	self.img = love.graphics.newImage('assets/link.png')
 	self.img:setFilter('linear', 'nearest')
@@ -77,7 +77,7 @@ function Player:update(dt)
 	dx, dy = 0, 0
 	oldquad = self.quad
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
-		if self.y < (love.graphics.getHeight() - height*scale) then
+		if self.y < (love.graphics.getHeight() - height) then
 			dy = self.speed * dt
 			if self.time < 0.125 then
 				self.quad = down_step1
@@ -107,7 +107,7 @@ function Player:update(dt)
 		end
 	end
 	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
-		if self.x < (love.graphics.getWidth() - width*scale) then
+		if self.x < (love.graphics.getWidth() - width) then
 			dx = self.speed * dt
 			if self.time < 0.125 then
 				self.quad = right_stand
@@ -128,7 +128,7 @@ end
 
 
 function Player:draw()
-	love.graphics.draw(self.img, self.quad, self.x, self.y, 0, scale, scale)
+	love.graphics.draw(self.img, self.quad, self.x, self.y)
 
 end
 
@@ -137,10 +137,6 @@ end
 function Player:intersects(o)
 	local _, _, w, h = self.quad:getViewport()
 	local _, _, ow, oh = o.quad:getViewport()
-	w = w * scale
-	h = h * scale
-	ow = ow * scale
-	oh = oh * scale
 
 	return not (
 		self.x > o.x + ow or
