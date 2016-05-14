@@ -41,8 +41,8 @@ function Monster:inBounds()
 	_, _, width, height = self.quads[self.q]:getViewport()
 
 	return self.x > 0 and self.y > 0 and
-		self.x < (love.graphics.getWidth() - height*scale) and
-		self.y < (love.graphics.getHeight() - height*scale)
+		self.x < love.graphics.getWidth() - height*scale and
+		self.y < love.graphics.getHeight() - height*scale
 end
 
 
