@@ -15,7 +15,7 @@ end
 
 function Background:update(dt)
 	self.time = self.time + dt
-	if self.time >= 0.40 then
+	while self.time >= 0.40 do
 		self.time = self.time - 0.40
 		self.fq = self.fq%4 + 1
 	end

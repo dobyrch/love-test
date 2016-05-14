@@ -94,5 +94,6 @@ end
 
 
 function Player:draw()
-	love.graphics.draw(self.img, self.quad, self.x, self.y, 0, 4, 4)
+	love.graphics.draw(self.img, self.quad, self.x, self.y, 0, scale, scale)
+
 end
