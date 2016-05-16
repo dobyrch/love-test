@@ -14,38 +14,18 @@ local down_step2
 
 
 function Player:new()
-	instance = {}
-	setmetatable(instance, self)
-	self.__index = self
+	instance = self:super('link.png', 8, 70, 70, 14, 16)
+	instance.speed = 60
 
-	self.x = 70
-	self.y = 70
-	self.speed = 60
-	self.width = 14
-	self.height = 16
-
-	self.img = love.graphics.newImage('assets/link.png')
-	self.img:setFilter('linear', 'nearest')
-
-	for i = 1,8 do
-		self.quads[i] = love.graphics.newQuad(
-			i + (i - 1)*self.width,
-			0,
-			self.width,
-			self.height,
-			self.img:getDimensions()
-		)
-	end
-
-	up_step1 = self.quads[1]
-	up_step2 = self.quads[2]
-	right_stand = self.quads[3]
-	right_step = self.quads[4]
-	left_step = self.quads[5]
-	left_stand = self.quads[6]
-	down_step1 = self.quads[7]
-	down_step2 = self.quads[8]
-	self.quad = down_step1
+	up_step1 = instance.quads[1]
+	up_step2 = instance.quads[2]
+	right_stand = instance.quads[3]
+	right_step = instance.quads[4]
+	left_step = instance.quads[5]
+	left_stand = instance.quads[6]
+	down_step1 = instance.quads[7]
+	down_step2 = instance.quads[8]
+	instance.quad = down_step1
 
 	return instance
 end
@@ -87,7 +67,6 @@ function Player:update(dt)
 	self.time = self.time + dt
 	self.time = self.time % 0.25
 
-	_, _, width, height = self.quad:getViewport()
 	dx, dy = 0, 0
 	oldquad = self.quad
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
@@ -141,6 +120,6 @@ end
 
 
 function Player:draw()
-	love.graphics.draw(self.img, self.quad, self.x, self.y)
+	love.graphics.draw(self.image, self.quad, self.x, self.y)
 
 end

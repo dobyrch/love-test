@@ -1,4 +1,40 @@
-Entity = {}
+require 'object'
+
+Entity = {images={}}
+setmetatable(Entity, {__index=Object})
+
+
+function Entity:new(image, quads, x, y, width, height)
+	local instance
+	instance = {quads={}}
+	self.__index = self
+	setmetatable(instance, self)
+
+	instance.x = x
+	instance.y = y
+	instance.width = width
+	instance.height = height
+
+	if self.images[image] then
+		instance.image = self.images[image]
+	else
+		instance.image = love.graphics.newImage('assets/' .. image)
+		instance.image:setFilter('linear', 'nearest')
+		self.images[image] = instance.image
+	end
+
+	sw, sh = instance.image:getDimensions()
+
+	for i = 1, quads do
+		instance.quads[i] = love.graphics.newQuad(
+			i + (i - 1)*width, 0,
+			width, height,
+			sw, sh
+		)
+	end
+
+	return instance
+end
 
 
 function Entity:inBounds()

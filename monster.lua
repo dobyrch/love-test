@@ -1,44 +1,14 @@
 require 'entity'
 
-Monster = {time=0, quads={}}
+Monster = {time=0}
 setmetatable(Monster, {__index=Entity})
-
-local left_step
-local left_stand
-local down_stand
-local down_step
-local up_step
-local up_stand
-local right_stand
-local right_step
 
 
 function Monster:new()
-	instance = {}
-	setmetatable(instance, self)
-	self.__index = self
-
-	self.x = 30
-	self.y = 30
-	self.speed = 30
-	self.width = 16
-	self.height = 16
-
-	self.img = love.graphics.newImage('assets/octorok.png')
-	self.img:setFilter('linear', 'nearest')
-
-	for i = 1,8 do
-		self.quads[i] = love.graphics.newQuad(
-			i + (i - 1)*self.width,
-			0,
-			self.width,
-			self.height,
-			self.img:getDimensions()
-		)
-	end
-
-	self.q = 1
-	self.steps = 0
+	instance = self:super('octorok.png', 8, 30, 30, 16, 16)
+	instance.speed = 30
+	instance.q = 1
+	instance.steps = 0
 
 	return instance
 end
@@ -100,5 +70,5 @@ function Monster:update(dt)
 end
 
 function Monster:draw()
-	love.graphics.draw(self.img, self.quads[self.q], self.x, self.y)
+	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
 end
