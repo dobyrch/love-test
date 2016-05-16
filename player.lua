@@ -1,4 +1,7 @@
-Player = {time=0}
+require 'entity'
+
+Player = {time=0, quads={}}
+setmetatable(Player, {__index=Entity})
 
 local up_step1
 local up_step2
@@ -18,17 +21,30 @@ function Player:new()
 	self.x = 70
 	self.y = 70
 	self.speed = 60
+	self.width = 14
+	self.height = 16
 
 	self.img = love.graphics.newImage('assets/link.png')
 	self.img:setFilter('linear', 'nearest')
-	up_step1 = love.graphics.newQuad(0, 0, 12, 16, self.img:getDimensions())
-	up_step2 = love.graphics.newQuad(14, 0, 12, 16, self.img:getDimensions())
-	right_stand = love.graphics.newQuad(28, 0, 14, 16, self.img:getDimensions())
-	right_step = love.graphics.newQuad(44, 0, 13, 16, self.img:getDimensions())
-	left_step = love.graphics.newQuad(59, 0, 13, 16, self.img:getDimensions())
-	left_stand = love.graphics.newQuad(74, 0, 14, 16, self.img:getDimensions())
-	down_step1 = love.graphics.newQuad(89, 0, 14, 16, self.img:getDimensions())
-	down_step2 = love.graphics.newQuad(103, 0, 14, 16, self.img:getDimensions())
+
+	for i = 1,8 do
+		self.quads[i] = love.graphics.newQuad(
+			i + (i - 1)*self.width,
+			0,
+			self.width,
+			self.height,
+			self.img:getDimensions()
+		)
+	end
+
+	up_step1 = self.quads[1]
+	up_step2 = self.quads[2]
+	right_stand = self.quads[3]
+	right_step = self.quads[4]
+	left_step = self.quads[5]
+	left_stand = self.quads[6]
+	down_step1 = self.quads[7]
+	down_step2 = self.quads[8]
 	self.quad = down_step1
 
 	return instance
@@ -38,14 +54,12 @@ end
 function Player:bump(dt)
 	-- TODO: store height and width when quads first created
 	-- TODO: give every entity a center() method
-	local _, _, w, h = self.quad:getViewport()
-	local _, _, mw, mh = monster.quad:getViewport()
 	local cx, cy, mcx, mcy, mag, xmag, ymag
 
-	cx = self.x + w/2
-	cy = self.y + h/2
-	mcx = monster.x + mw/2
-	mcy = monster.y + mh/2
+	cx = self.x + self.width/2
+	cy = self.y + self.height/2
+	mcx = monster.x + monster.width/2
+	mcy = monster.y + monster.height/2
 
 	mag = math.sqrt((cx - mcx)^2 + (cy - mcy)^2)
 	xmag = (1 / mag)*(cx - mcx)
@@ -77,43 +91,35 @@ function Player:update(dt)
 	dx, dy = 0, 0
 	oldquad = self.quad
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
-		if self.y < (love.graphics.getHeight() - height) then
-			dy = self.speed * dt
-			if self.time < 0.125 then
-				self.quad = down_step1
-			else
-				self.quad = down_step2
-			end
+		dy = self.speed * dt
+		if self.time < 0.125 then
+			self.quad = down_step1
+		else
+			self.quad = down_step2
 		end
 	end
 	if love.keyboard.isDown('up','e') and not love.keyboard.isDown('down','d') then
-		if self.y > 0 then
-			dy = -self.speed * dt
-			if self.time < 0.125 then
-				self.quad = up_step1
-			else
-				self.quad = up_step2
-			end
+		dy = -self.speed * dt
+		if self.time < 0.125 then
+			self.quad = up_step1
+		else
+			self.quad = up_step2
 		end
 	end
 	if love.keyboard.isDown('left','s') and not love.keyboard.isDown('right','f') then
-		if self.x > 0 then
-			dx = -self.speed * dt
-			if self.time < 0.125 then
-				self.quad = left_stand
-			else
-				self.quad = left_step
-			end
+		dx = -self.speed * dt
+		if self.time < 0.125 then
+			self.quad = left_stand
+		else
+			self.quad = left_step
 		end
 	end
 	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
-		if self.x < (love.graphics.getWidth() - width) then
-			dx = self.speed * dt
-			if self.time < 0.125 then
-				self.quad = right_stand
-			else
-				self.quad = right_step
-			end
+		dx = self.speed * dt
+		if self.time < 0.125 then
+			self.quad = right_stand
+		else
+			self.quad = right_step
 		end
 	end
 
@@ -123,25 +129,18 @@ function Player:update(dt)
 	end
 
 	self.x = self.x + dx
+	if not player:inBounds() then
+		self.x = self.x - dx
+	end
+
 	self.y = self.y + dy
+	if not player:inBounds() then
+		self.y = self.y - dy
+	end
 end
 
 
 function Player:draw()
 	love.graphics.draw(self.img, self.quad, self.x, self.y)
 
-end
-
--- TODO: check if both entities are collidable (probably should also rename this to collides)
--- TODO: allow caller to pass # of pixels of leeway
-function Player:intersects(o)
-	local _, _, w, h = self.quad:getViewport()
-	local _, _, ow, oh = o.quad:getViewport()
-
-	return not (
-		self.x > o.x + ow or
-		o.x > self.x + w or
-		self.y > o.y + oh or
-		o.y > self.y + h
-	)
 end

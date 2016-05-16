@@ -1,4 +1,7 @@
+require 'entity'
+
 Monster = {time=0, quads={}}
+setmetatable(Monster, {__index=Entity})
 
 local left_step
 local left_stand
@@ -18,31 +21,26 @@ function Monster:new()
 	self.x = 30
 	self.y = 30
 	self.speed = 30
+	self.width = 16
+	self.height = 16
 
 	self.img = love.graphics.newImage('assets/octorok.png')
 	self.img:setFilter('linear', 'nearest')
-	self.quads[1] = love.graphics.newQuad(1, 0, 16, 17, self.img:getDimensions())
-	self.quads[2] = love.graphics.newQuad(18, 0, 16, 17, self.img:getDimensions())
-	self.quads[3] = love.graphics.newQuad(36, 0, 16, 17, self.img:getDimensions())
-	self.quads[4] = love.graphics.newQuad(54, 0, 16, 17, self.img:getDimensions())
-	self.quads[5] = love.graphics.newQuad(72, 0, 16, 17, self.img:getDimensions())
-	self.quads[6] = love.graphics.newQuad(90, 0, 16, 17, self.img:getDimensions())
-	self.quads[7] = love.graphics.newQuad(108, 0, 16, 17, self.img:getDimensions())
-	self.quads[8] = love.graphics.newQuad(125, 0, 16, 17, self.img:getDimensions())
+
+	for i = 1,8 do
+		self.quads[i] = love.graphics.newQuad(
+			i + (i - 1)*self.width,
+			0,
+			self.width,
+			self.height,
+			self.img:getDimensions()
+		)
+	end
+
 	self.q = 1
 	self.steps = 0
 
 	return instance
-end
-
-
-function Monster:inBounds()
-	local width, height
-	_, _, width, height = self.quads[self.q]:getViewport()
-
-	return self.x > 0 and self.y > 0 and
-		self.x < love.graphics.getWidth() - height and
-		self.y < love.graphics.getHeight() - height
 end
 
 

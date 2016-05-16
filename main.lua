@@ -26,7 +26,7 @@ function love.update(dt)
 	player:update(dt)
 	monster:update(dt)
 
-	if player:intersects(monster) then
+	if player:collides(monster, 5) then
 		-- TODO: add method for switching state that takes care
 		-- of stuff like setting up the internal timer
 		player.action = 'bump'
