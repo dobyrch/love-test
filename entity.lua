@@ -1,6 +1,6 @@
-require 'object'
+Object = require 'object'
 
-Entity = {images={}}
+local Entity = {images={}}
 setmetatable(Entity, {__index=Object})
 
 
@@ -55,3 +55,6 @@ function Entity:collides(other, buffer)
 		other.y > self.y + self.height - buffer
 	)
 end
+
+
+return Entity

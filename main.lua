@@ -1,8 +1,8 @@
-require 'background'
-require 'monster'
-require 'player'
+Background = require 'background'
+Monster = require 'monster'
+Player = require 'player'
 
-tiles = {
+local tiles = {
 	{1,2,2,2,2,2,2,2,2,3},
 	{4,5,5,0,5,5,0,5,5,6},
 	{4,5,5,5,5,5,5,5,5,6},

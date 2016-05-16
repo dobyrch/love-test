@@ -1,6 +1,6 @@
-require 'entity'
+Entity = require 'entity'
 
-Monster = {time=0}
+local Monster = {time=0}
 setmetatable(Monster, {__index=Entity})
 
 
@@ -72,3 +72,6 @@ end
 function Monster:draw()
 	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
 end
+
+
+return Monster

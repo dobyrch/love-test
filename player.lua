@@ -1,6 +1,6 @@
-require 'entity'
+Entity = require 'entity'
 
-Player = {time=0, quads={}}
+local Player = {time=0, quads={}}
 setmetatable(Player, {__index=Entity})
 
 local up_step1
@@ -123,3 +123,6 @@ function Player:draw()
 	love.graphics.draw(self.image, self.quad, self.x, self.y)
 
 end
+
+
+return Player

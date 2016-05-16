@@ -1,4 +1,4 @@
-Background = {time=0, fq=1}
+local Background = {time=0, fq=1}
 
 local grass, grass_w, grass_h, grass_quads
 local flowers, flower_w, flower_h, flower_quads
@@ -59,3 +59,6 @@ quadinfo = {
 for i, qi in ipairs(quadinfo) do
 	flower_quads[i] = love.graphics.newQuad(qi[1], qi[2], 16, 16, flower_w, flower_h)
 end
+
+
+return Background
