@@ -2,33 +2,11 @@ subclass = require 'subclass'
 Entity = require 'entity'
 
 
-local Player = subclass(Entity, {time=0})
-
-local up_step1
-local up_step2
-local right_stand
-local right_step
-local left_step
-local left_stand
-local down_step1
-local down_step2
+local Player = subclass(Entity, {time=0, speed=60, q=7})
 
 
 function Player:new()
-	instance = self:super('link.png', 8, 70, 70, 14, 16)
-	instance.speed = 60
-
-	up_step1 = instance.quads[1]
-	up_step2 = instance.quads[2]
-	right_stand = instance.quads[3]
-	right_step = instance.quads[4]
-	left_step = instance.quads[5]
-	left_stand = instance.quads[6]
-	down_step1 = instance.quads[7]
-	down_step2 = instance.quads[8]
-	instance.quad = down_step1
-
-	return instance
+	return self:super('link.png', 8, 70, 70, 14, 16)
 end
 
 
@@ -73,33 +51,33 @@ function Player:update(dt)
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
 		dy = self.speed * dt
 		if self.time < 0.125 then
-			self.quad = down_step1
+			self.q = 7
 		else
-			self.quad = down_step2
+			self.q = 8
 		end
 	end
 	if love.keyboard.isDown('up','e') and not love.keyboard.isDown('down','d') then
 		dy = -self.speed * dt
 		if self.time < 0.125 then
-			self.quad = up_step1
+			self.q = 1
 		else
-			self.quad = up_step2
+			self.q = 2
 		end
 	end
 	if love.keyboard.isDown('left','s') and not love.keyboard.isDown('right','f') then
 		dx = -self.speed * dt
 		if self.time < 0.125 then
-			self.quad = left_stand
+			self.q = 6
 		else
-			self.quad = left_step
+			self.q = 5
 		end
 	end
 	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
 		dx = self.speed * dt
 		if self.time < 0.125 then
-			self.quad = right_stand
+			self.q = 3
 		else
-			self.quad = right_step
+			self.q = 4
 		end
 	end
 
@@ -121,7 +99,7 @@ end
 
 
 function Player:draw()
-	love.graphics.draw(self.image, self.quad, self.x, self.y)
+	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
 
 end
 

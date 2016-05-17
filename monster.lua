@@ -2,16 +2,11 @@ subclass = require 'subclass'
 Entity = require 'entity'
 
 
-local Monster = subclass(Entity, {time=0})
+local Monster = subclass(Entity, {time=0, speed=30, q=1, steps=0})
 
 
 function Monster:new()
-	instance = self:super('octorok.png', 8, 30, 30, 16, 16)
-	instance.speed = 30
-	instance.q = 1
-	instance.steps = 0
-
-	return instance
+	return self:super('octorok.png', 8, 30, 30, 16, 16)
 end
 
 
