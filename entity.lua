@@ -22,6 +22,7 @@ function Entity:new(image, quads, x, y, width, height)
 	instance.width = width
 	instance.height = height
 	instance.quads = {}
+	instance.time = 0
 
 	if self.images[image] then
 		instance.image = self.images[image]
@@ -61,6 +62,25 @@ function Entity:collides(other, buffer)
 		self.y > other.y + other.height - buffer or
 		other.y > self.y + self.height - buffer
 	)
+end
+
+
+function Entity:update(dt)
+	if self.action then
+		self:action(dt)
+	end
+end
+
+
+function Entity:setAction(action)
+	local action_func = self[action]
+
+	if action_func then
+		self.action = action_func
+		self.time = 0
+	else
+		error('Unknown action "' .. action .. '"', 2)
+	end
 end
 
 

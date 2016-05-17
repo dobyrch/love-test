@@ -27,10 +27,7 @@ function love.update(dt)
 	monster:update(dt)
 
 	if player:collides(monster, 5) then
-		-- TODO: add method for switching state that takes care
-		-- of stuff like setting up the internal timer
-		player.action = 'bump'
-		player.time = 0
+		player:setAction('bump')
 	end
 
 	if love.keyboard.isDown('q') then

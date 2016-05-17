@@ -6,11 +6,14 @@ local Monster = subclass(Entity, {time=0, speed=30, q=1, steps=0})
 
 
 function Monster:new()
-	return self:super('octorok.png', 8, 30, 30, 16, 16)
+	local instance
+	instance = self:super('octorok.png', 8, 40, 40, 16, 16)
+	instance.action = self.walk
+	return instance
 end
 
 
-function Monster:update(dt)
+function Monster:walk(dt)
 	self.time = self.time + dt
 	while self.time > 0.125 do
 		self.steps = self.steps + 1

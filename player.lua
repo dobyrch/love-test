@@ -6,7 +6,10 @@ local Player = subclass(Entity, {time=0, speed=60, q=7})
 
 
 function Player:new()
-	return self:super('link.png', 8, 70, 70, 14, 16)
+	local instance
+	instance = self:super('link.png', 8, 70, 70, 14, 16)
+	instance.action = self.walk
+	return instance
 end
 
 
@@ -29,20 +32,12 @@ function Player:bump(dt)
 
 	self.time = self.time + dt
 	if self.time > 0.2 then
-		self.time = 0
-		self.action = 'walk'
+		self:setAction('walk')
 	end
 end
 
 
-function Player:update(dt)
-	-- TODO: add table of actions
-	-- TODO: refactor update() to call current action
-	if self.action == 'bump' then
-		self:bump(dt)
-		return
-	end
-
+function Player:walk(dt)
 	self.time = self.time + dt
 	self.time = self.time % 0.25
 
