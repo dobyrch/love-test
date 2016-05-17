@@ -77,6 +77,7 @@ function Entity:setAction(action)
 
 	if action_func then
 		self.action = action_func
+		self.shader = nil
 		self.time = 0
 	else
 		error('Unknown action "' .. action .. '"', 2)

@@ -1,5 +1,6 @@
 subclass = require 'subclass'
 Entity = require 'entity'
+shader = require 'shader'
 
 
 local Player = subclass(Entity, {time=0, speed=60, q=7})
@@ -17,6 +18,8 @@ function Player:bump(dt)
 	-- TODO: store height and width when quads first created
 	-- TODO: give every entity a center() method
 	local cx, cy, mcx, mcy, mag, xmag, ymag
+	self.shader = shader.damaged
+	self.shader:send('time', self.time)
 
 	cx = self.x + self.width/2
 	cy = self.y + self.height/2
@@ -94,7 +97,9 @@ end
 
 
 function Player:draw()
+	love.graphics.setShader(self.shader)
 	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
+	love.graphics.setShader(nil)
 
 end
 
