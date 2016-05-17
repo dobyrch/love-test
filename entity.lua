@@ -52,6 +52,11 @@ function Entity:inBounds()
 end
 
 
+function Entity:center()
+	return self.x + self.width/2, self.y + self.height/2
+end
+
+
 -- TODO: check if both entities are collidable
 function Entity:collides(other, buffer)
 	buffer = buffer or 0
@@ -72,11 +77,14 @@ function Entity:update(dt)
 end
 
 
-function Entity:setAction(action)
+function Entity:setAction(action, ...)
 	local action_func = self[action]
+	local args = {...}
 
 	if action_func then
-		self.action = action_func
+		self.action = function(self, dt)
+			action_func(self, dt, unpack(args))
+		end
 		self.shader = nil
 		self.time = 0
 	else

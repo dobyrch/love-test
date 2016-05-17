@@ -14,21 +14,19 @@ function Player:new()
 end
 
 
-function Player:bump(dt)
+function Player:recoil(dt, other)
 	-- TODO: store height and width when quads first created
 	-- TODO: give every entity a center() method
-	local cx, cy, mcx, mcy, mag, xmag, ymag
+	local cx, cy, ocx, ocy, mag, xmag, ymag
 	self.shader = shader.damaged
 	self.shader:send('time', self.time)
 
-	cx = self.x + self.width/2
-	cy = self.y + self.height/2
-	mcx = monster.x + monster.width/2
-	mcy = monster.y + monster.height/2
+	cx, cy = self:center()
+	ocx, ocy = other:center()
 
-	mag = math.sqrt((cx - mcx)^2 + (cy - mcy)^2)
-	xmag = (1 / mag)*(cx - mcx)
-	ymag = (1 / mag)*(cy - mcy)
+	mag = math.sqrt((cx - ocx)^2 + (cy - ocy)^2)
+	xmag = (1 / mag)*(cx - ocx)
+	ymag = (1 / mag)*(cy - ocy)
 
 	self.x = self.x + dt*xmag*self.speed*4/3
 	self.y = self.y + dt*ymag*self.speed*4/3

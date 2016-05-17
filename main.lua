@@ -27,7 +27,7 @@ function love.update(dt)
 	monster:update(dt)
 
 	if player:collides(monster, 5) then
-		player:setAction('bump')
+		player:setAction('recoil', monster)
 	end
 
 	if love.keyboard.isDown('q') then
