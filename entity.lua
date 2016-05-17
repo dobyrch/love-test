@@ -1,19 +1,27 @@
+subclass = require 'subclass'
 Object = require 'object'
 
-local Entity = {images={}}
-setmetatable(Entity, {__index=Object})
+
+local Entity = subclass(Object, {images={}})
 
 
+-- TODO: Pass arguments as table?
+-- Entity:new{
+-- 	image='file.png',
+-- 	quads=8,
+-- 	x=70,
+-- 	y=70,
+-- 	width=16,
+-- 	height=16
+-- }
 function Entity:new(image, quads, x, y, width, height)
-	local instance
-	instance = {quads={}}
-	self.__index = self
-	setmetatable(instance, self)
+	local instance = self:super()
 
 	instance.x = x
 	instance.y = y
 	instance.width = width
 	instance.height = height
+	instance.quads = {}
 
 	if self.images[image] then
 		instance.image = self.images[image]
@@ -24,7 +32,6 @@ function Entity:new(image, quads, x, y, width, height)
 	end
 
 	sw, sh = instance.image:getDimensions()
-
 	for i = 1, quads do
 		instance.quads[i] = love.graphics.newQuad(
 			i + (i - 1)*width, 0,

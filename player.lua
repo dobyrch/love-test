@@ -1,7 +1,8 @@
+subclass = require 'subclass'
 Entity = require 'entity'
 
-local Player = {time=0, quads={}}
-setmetatable(Player, {__index=Entity})
+
+local Player = subclass(Entity, {time=0})
 
 local up_step1
 local up_step2

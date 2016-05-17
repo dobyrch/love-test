@@ -1,7 +1,8 @@
+subclass = require 'subclass'
 Entity = require 'entity'
 
-local Monster = {time=0}
-setmetatable(Monster, {__index=Entity})
+
+local Monster = subclass(Entity, {time=0})
 
 
 function Monster:new()
