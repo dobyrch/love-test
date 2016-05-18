@@ -36,8 +36,7 @@ function Entity:new()
 	instance.height = 16
 	instance.dir = 'down'
 	instance.buffer = 0
-	instance.quads = {}
-	instance.timers = {}
+	instance.tmp = {}
 
 	return instance
 end
@@ -91,10 +90,12 @@ end
 
 
 function Entity:draw()
-	love.graphics.setShader(self.shader)
-	local image, quad =self.animation:getFrame(self.dir)
-	love.graphics.draw(image, quad, self.x, self.y)
-	love.graphics.setShader(nil)
+	if not self.deleted then
+		love.graphics.setShader(self.shader)
+		local image, quad = self.animation:getFrame(self.dir)
+		love.graphics.draw(image, quad, self.x, self.y)
+		love.graphics.setShader(nil)
+	end
 
 end
 
@@ -113,8 +114,13 @@ function Entity:setAction(action, ...)
 	local args = {...}
 
 	if action_func then
-		self.time = 0
 		self.action = action
+		self.time = 0
+
+		for k, v in pairs(self.tmp) do
+			v.deleted = true
+			self.tmp[k] = nil
+		end
 
 		self.action_func = function(self, dt)
 			action_func(self, dt, unpack(args))
@@ -129,6 +135,7 @@ function Entity:callAction(action, dt, ...)
 	local saved_action = self.action
 	local saved_func = self.action_func
 	local saved_time = self.time
+	local saved_tmp = self.tmp
 
 	self:setAction(action, ...)
 	self:action_func(dt)
@@ -136,6 +143,7 @@ function Entity:callAction(action, dt, ...)
 	self:setAction(saved_action)
 	self.action_func = saved_func
 	self.time = saved_time
+	self.tmp = saved_tmp
 end
 
 

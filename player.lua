@@ -22,18 +22,16 @@ end
 
 
 function Player:swing(dt)
-	if not self.sword then
-		self.sword = Sword:new()
-		self.sword.x = self.x
-		self.sword.y = self.y
-		self.sword.dir = self.dir
+	if not self.tmp.sword then
+		self.tmp.sword = Sword:new()
+		self.tmp.sword.x = self.x
+		self.tmp.sword.y = self.y
+		self.tmp.sword.dir = self.dir
 	end
 
 	self.time = self.time + dt
 
-	if self.time >= self.sword.animation:getLength() then
-		self.sword.deleted = true
-		self.sword = nil
+	if self.time >= self.tmp.sword.animation:getLength() then
 		self:setAction('walk')
 	end
 

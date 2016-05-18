@@ -24,13 +24,9 @@ end
 
 function love.update(dt)
 	background:update(dt)
-	player:update(dt)
-	monster:update(dt)
-	if player.sword then
-		player.sword:update(dt)
-	end
 
 	for _, e1 in pairs(Entity.instances) do
+		e1:update(dt)
 		for _, e2 in pairs(Entity.instances) do
 			if e1 ~= e2 and e1:intersects(e2) then
 				e1:collide(dt, e2)
@@ -42,10 +38,10 @@ end
 
 function love.draw(dt)
 	love.graphics.scale(4, 4)
+
 	background:draw()
-	monster:draw()
-	player:draw()
-	if player.sword then
-		player.sword:draw()
+
+	for _, e in pairs(Entity.instances) do
+		e:draw()
 	end
 end
