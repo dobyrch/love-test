@@ -21,6 +21,7 @@ function Entity:new(image, quads, x, y, width, height)
 	instance.y = y
 	instance.width = width
 	instance.height = height
+	instance.q = 1
 	instance.quads = {}
 	instance.timers = {}
 
@@ -67,6 +68,14 @@ function Entity:collides(other, buffer)
 		self.y > other.y + other.height - buffer or
 		other.y > self.y + self.height - buffer
 	)
+end
+
+
+function Entity:draw()
+	love.graphics.setShader(self.shader)
+	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
+	love.graphics.setShader(nil)
+
 end
 
 

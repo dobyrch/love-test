@@ -2,13 +2,15 @@ subclass = require 'subclass'
 Entity = require 'entity'
 
 
-local Monster = subclass(Entity, {time=0, speed=30, q=1, steps=0})
+local Monster = subclass(Entity)
 
 
 function Monster:new()
 	local instance
 	instance = self:super('octorok.png', 8, 40, 40, 16, 16)
 	instance:setAction('walk')
+	instance.speed = 30
+	instance.steps = 0
 	return instance
 end
 
@@ -65,10 +67,6 @@ function Monster:walk(dt)
 	end
 
 	self.quad = self.quads[self.q]
-end
-
-function Monster:draw()
-	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
 end
 
 

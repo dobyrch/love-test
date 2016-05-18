@@ -3,13 +3,15 @@ Entity = require 'entity'
 shader = require 'shader'
 
 
-local Player = subclass(Entity, {speed=60, q=7})
+local Player = subclass(Entity)
 
 
 function Player:new()
 	local instance
 	instance = self:super('link.png', 8, 70, 70, 14, 16)
 	instance:setAction('walk')
+	instance.speed = 60
+	instance.q = 7
 	return instance
 end
 
@@ -82,14 +84,6 @@ function Player:walk(dt)
 	if not player:inBounds() then
 		self.y = self.y - dy
 	end
-end
-
-
-function Player:draw()
-	love.graphics.setShader(self.shader)
-	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
-	love.graphics.setShader(nil)
-
 end
 
 
