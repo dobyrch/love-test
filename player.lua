@@ -3,46 +3,37 @@ Entity = require 'entity'
 shader = require 'shader'
 
 
-local Player = subclass(Entity, {time=0, speed=60, q=7})
+local Player = subclass(Entity, {speed=60, q=7})
 
 
 function Player:new()
 	local instance
 	instance = self:super('link.png', 8, 70, 70, 14, 16)
-	instance.action = self.walk
+	instance:setAction('walk')
 	return instance
 end
 
 
 function Player:recoil(dt, other)
-	-- TODO: store height and width when quads first created
-	-- TODO: give every entity a center() method
-	local cx, cy, ocx, ocy, mag, xmag, ymag
 	self.shader = shader.damaged
 	self.shader:send('time', self.time)
 
-	cx, cy = self:center()
-	ocx, ocy = other:center()
-
-	mag = math.sqrt((cx - ocx)^2 + (cy - ocy)^2)
-	xmag = (1 / mag)*(cx - ocx)
-	ymag = (1 / mag)*(cy - ocy)
-
-	self.x = self.x + dt*xmag*self.speed*4/3
-	self.y = self.y + dt*ymag*self.speed*4/3
-
-	self.time = self.time + dt
-	if self.time > 0.2 then
+	if self.time < 0.300 then
+		self:callAction('bump', dt, other)
+	elseif self.time < 0.800 then
+		self:callAction('walk', dt)
+	else
+		self.time = 0
+		self.shader = nil
 		self:setAction('walk')
 	end
 end
 
 
 function Player:walk(dt)
-	self.time = self.time + dt
 	self.time = self.time % 0.25
 
-	dx, dy = 0, 0
+	local dx, dy = 0, 0
 	oldquad = self.quad
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
 		dy = self.speed * dt

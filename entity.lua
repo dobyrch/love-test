@@ -22,7 +22,7 @@ function Entity:new(image, quads, x, y, width, height)
 	instance.width = width
 	instance.height = height
 	instance.quads = {}
-	instance.time = 0
+	instance.timers = {}
 
 	if self.images[image] then
 		instance.image = self.images[image]
@@ -72,7 +72,8 @@ end
 
 function Entity:update(dt)
 	if self.action then
-		self:action(dt)
+		self.time = self.time + dt
+		self:action_func(dt)
 	end
 end
 
@@ -82,14 +83,47 @@ function Entity:setAction(action, ...)
 	local args = {...}
 
 	if action_func then
-		self.action = function(self, dt)
+		if self.action then
+			self.timers[self.action] = self.time
+		end
+
+		self.time = self.timers[action] or 0
+		self.action = action
+
+		self.action_func = function(self, dt)
 			action_func(self, dt, unpack(args))
 		end
-		self.shader = nil
-		self.time = 0
 	else
 		error('Unknown action "' .. action .. '"', 2)
 	end
+end
+
+
+function Entity:callAction(action, dt, ...)
+	local saved_action = self.action
+	local saved_func = self.action_func
+
+	self:setAction(action, ...)
+	self.time = self.time + dt
+	self:action_func(dt)
+
+	self:setAction(saved_action)
+	self.action_func = saved_func
+end
+
+
+function Entity:bump(dt, other)
+	local cx, cy, ocx, ocy, mag, xmag, ymag
+
+	cx, cy = self:center()
+	ocx, ocy = other:center()
+
+	mag = math.sqrt((cx - ocx)^2 + (cy - ocy)^2)
+	xmag = (cx - ocx)/mag
+	ymag = (cy - ocy)/mag
+
+	self.x = self.x + dt*xmag*self.speed*4/3
+	self.y = self.y + dt*ymag*self.speed*4/3
 end
 
 
