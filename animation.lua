@@ -16,6 +16,9 @@ function Animation:new(filename, ...)
 	instance.time = 0
 	instance.timings = {...}
 
+	if #instance.timings == 0 then
+		instance.timings = {0.250}
+	end
 
 	if self.images[filename] then
 		instance.image = self.images[filename]
@@ -41,14 +44,15 @@ function Animation:new(filename, ...)
 	end
 
 	while #instance.timings < width/DIM do
-		table.insert(instance.timings, 0.250)
+		print(#instance.timings)
+		table.insert(instance.timings, instance.timings[#instance.timings])
 	end
 
 	return instance
 end
 
 
-function Animation:nextFrame(dt)
+function Animation:update(dt)
 	--[[
 	print('time:', self.time, self.time + dt)
 	print('timing:', self.timings[self.frame])

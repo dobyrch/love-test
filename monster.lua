@@ -7,7 +7,8 @@ local Monster = subclass(Entity, {alignment='bad'})
 
 function Monster:new()
 	local instance
-	instance = self:super('octorok.png', 8, 40, 40, 16, 16)
+	instance = self:super()
+	instance.animation = Animation:new('octorok.png', 0.125)
 	instance:setAction('walk')
 	instance.x = 70
 	instance.y = 70
@@ -36,10 +37,6 @@ function Monster:walk(dt)
 
 		if self.steps < 0 then
 			break
-		end
-
-		if self:inBounds() then
-			self.animation:nextFrame(dt)
 		end
 
 		if self.steps > 6 or self.steps > 1 and love.math.random() < 0.15 then

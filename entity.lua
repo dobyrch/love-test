@@ -26,11 +26,10 @@ setmetatable(Entity.instances, {__mode='v'})
 -- 	width=16,
 -- 	height=16
 -- }
-function Entity:new(filename)
+function Entity:new()
 	local instance = self:super()
 	table.insert(self.instances, instance)
 
-	instance.animation = Animation:new(filename)
 	instance.x = 0
 	instance.y = 0
 	instance.width = 16
@@ -100,7 +99,7 @@ end
 
 
 function Entity:update(dt)
-	self.animation:nextFrame(dt)
+	self.animation:update(dt)
 	if self.action then
 		self.time = self.time + dt
 		self:action_func(dt)

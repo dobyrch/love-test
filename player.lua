@@ -9,13 +9,14 @@ local Player = subclass(Entity, {alignment='good'})
 
 function Player:new()
 	local instance
-	instance = self:super('link.png', 8, 70, 70, 14, 16)
+	instance = self:super()
 	instance:setAction('walk')
 	instance.x = 30
 	instance.y = 30
 	instance.speed = 60
 	instance.health = 10
 	instance.harmable = true
+	instance.animation = Animation:new('link.png', 0.125)
 	return instance
 end
 
@@ -53,12 +54,12 @@ end
 
 
 function Player:walk(dt)
-	local anim_speed = 0.125
 
-	while self.time > anim_speed do
-		self.time = self.time - anim_speed
-		self.animation:nextFrame(dt)
+	if self.time == 0 then
+		self.animation = Animation:new('link.png', 0.125)
 	end
+
+	self.time = self.time + dt
 
 	local dx, dy = 0, 0
 
