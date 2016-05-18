@@ -84,7 +84,6 @@ function Entity:recoil(dt, other)
 	elseif self.time < 0.800 then
 		self:callAction('walk', dt)
 	else
-		self.time = 0
 		self.shader = nil
 		self:setAction('walk')
 	end
@@ -114,11 +113,7 @@ function Entity:setAction(action, ...)
 	local args = {...}
 
 	if action_func then
-		if self.action then
-			self.timers[self.action] = self.time
-		end
-
-		self.time = self.timers[action] or 0
+		self.time = 0
 		self.action = action
 
 		self.action_func = function(self, dt)
@@ -133,13 +128,14 @@ end
 function Entity:callAction(action, dt, ...)
 	local saved_action = self.action
 	local saved_func = self.action_func
+	local saved_time = self.time
 
 	self:setAction(action, ...)
-	self.time = self.time + dt
 	self:action_func(dt)
 
 	self:setAction(saved_action)
 	self.action_func = saved_func
+	self.time = saved_time
 end
 
 

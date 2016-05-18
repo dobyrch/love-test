@@ -53,7 +53,6 @@ function Player:swing(dt)
 		ytab = {self.height,self.height, -self.height,-self.height, 0,0, 0,0}
 		self.sword.animation:nextFrame(dt)
 	else
-		self.time = 0
 		self.sword.x, self.sword.y = 1000, 1000
 		self.sword = nil
 		self:setAction('walk')
@@ -74,7 +73,6 @@ function Player:walk(dt)
 
 	if love.keyboard.isDown('k') then
 		self:setAction('swing')
-		self.time = 0
 	end
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
 		dy = self.speed * dt
