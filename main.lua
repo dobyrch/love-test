@@ -19,7 +19,6 @@ function love.load(arg)
 	background = Background:new(tiles)
 	player = Player:new()
 	monster = Monster:new()
-	print('monster:', monster.buffer)
 end
 
 

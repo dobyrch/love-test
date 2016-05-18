@@ -16,7 +16,6 @@ function Sword:harm(dt, other)
 	if other.action ~= 'recoil' and other.alignment == 'bad' then
 		other:setAction('recoil', self)
 		other.health = other.health - self.damage
-		print(other.health)
 	end
 end
 

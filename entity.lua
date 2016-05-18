@@ -1,12 +1,18 @@
 subclass = require 'subclass'
 Object = require 'object'
+Animation = require 'animation'
 
 
-local instances={}
 local Entity = subclass(Object, {
-	images={},
-	instances={},
-	alignment='neutral',
+	instances = {},
+	dirs = {
+		'down', 'up', 'right', 'left',
+		down = {0, 1},
+		up = {0, -1},
+		right = {1, 0},
+		left = {-1, 0}
+	},
+	alignment = 'neutral',
 })
 setmetatable(Entity.instances, {__mode='v'})
 
@@ -20,35 +26,19 @@ setmetatable(Entity.instances, {__mode='v'})
 -- 	width=16,
 -- 	height=16
 -- }
-function Entity:new(image, quads, x, y, width, height)
+function Entity:new(filename)
 	local instance = self:super()
 	table.insert(self.instances, instance)
 
-	instance.x = x
-	instance.y = y
-	instance.width = width
-	instance.height = height
-	instance.q = 1
+	instance.animation = Animation:new(filename)
+	instance.x = 0
+	instance.y = 0
+	instance.width = 16
+	instance.height = 16
+	instance.dir = 'down'
 	instance.buffer = 0
 	instance.quads = {}
 	instance.timers = {}
-
-	if self.images[image] then
-		instance.image = self.images[image]
-	else
-		instance.image = love.graphics.newImage('assets/' .. image)
-		instance.image:setFilter('linear', 'nearest')
-		self.images[image] = instance.image
-	end
-
-	sw, sh = instance.image:getDimensions()
-	for i = 1, quads do
-		instance.quads[i] = love.graphics.newQuad(
-			i + (i - 1)*width, 0,
-			width, height,
-			sw, sh
-		)
-	end
 
 	return instance
 end
@@ -102,13 +92,15 @@ end
 
 function Entity:draw()
 	love.graphics.setShader(self.shader)
-	love.graphics.draw(self.image, self.quads[self.q], self.x, self.y)
+	local image, quad =self.animation:getFrame(self.dir)
+	love.graphics.draw(image, quad, self.x, self.y)
 	love.graphics.setShader(nil)
 
 end
 
 
 function Entity:update(dt)
+	self.animation:nextFrame(dt)
 	if self.action then
 		self.time = self.time + dt
 		self:action_func(dt)
@@ -171,6 +163,22 @@ function Entity:bump(dt, other)
 	if not self:inBounds() then
 		self.y = oldy
 	end
+end
+
+
+function Entity:setDir(dir)
+	if not dir then
+		self.dir = self.dirs[math.random(#self.dirs)]
+	elseif self.dirs[dir] then
+		self.dir = dir
+	else
+		error('Unknown dir "' .. dir '"', 2)
+	end
+end
+
+
+function Entity:dirVector()
+	return unpack(self.dirs[self.dir])
 end
 
 

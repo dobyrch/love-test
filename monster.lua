@@ -9,6 +9,8 @@ function Monster:new()
 	local instance
 	instance = self:super('octorok.png', 8, 40, 40, 16, 16)
 	instance:setAction('walk')
+	instance.x = 70
+	instance.y = 70
 	instance.speed = 30
 	instance.steps = 0
 	instance.damage = 1
@@ -23,7 +25,6 @@ function Monster:harm(dt, other)
 	if other.action ~= 'recoil' then
 		other:setAction('recoil', self)
 		other.health = other.health - self.damage
-		print(other.health)
 	end
 end
 
@@ -38,33 +39,16 @@ function Monster:walk(dt)
 		end
 
 		if self:inBounds() then
-			if self.q % 2 == 0 then
-				self.q = self.q - 1
-			else
-				self.q = self.q + 1
-			end
+			self.animation:nextFrame(dt)
 		end
 
 		if self.steps > 6 or self.steps > 1 and love.math.random() < 0.15 then
 			self.steps = -3
-			self.q = love.math.random(4) * 2
+			self:setDir()
 		end
 	end
 
-	local xdir, ydir
-	if self.q > 6 then
-		xdir = 1
-		ydir = 0
-	elseif self.q > 4 then
-		xdir = 0
-		ydir = -1
-	elseif self.q > 2 then
-		xdir = 0
-		ydir = 1
-	else
-		xdir = -1
-		ydir = 0
-	end
+	local xdir, ydir = self:dirVector()
 
 	if self:inBounds() and self.steps >= 0 then
 		self.x = self.x + self.speed*dt*xdir
@@ -76,10 +60,8 @@ function Monster:walk(dt)
 		self.x = self.x - self.speed*dt*xdir
 		self.y = self.y - self.speed*dt*ydir
 		self.steps = 0
-		self.q = love.math.random(4) * 2
+		self:setDir()
 	end
-
-	self.quad = self.quads[self.q]
 end
 
 
