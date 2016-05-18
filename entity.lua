@@ -131,8 +131,13 @@ function Entity:bump(dt, other)
 	xmag = (cx - ocx)/mag
 	ymag = (cy - ocy)/mag
 
+	local oldx, oldy = self.x, self.y
 	self.x = self.x + dt*xmag*self.speed*4/3
 	self.y = self.y + dt*ymag*self.speed*4/3
+
+	if not self:inBounds() then
+		self.x, self.y = oldx, oldy
+	end
 end
 
 
