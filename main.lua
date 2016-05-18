@@ -1,3 +1,4 @@
+Entity = require 'entity'
 Background = require 'background'
 Monster = require 'monster'
 Player = require 'player'
@@ -18,6 +19,7 @@ function love.load(arg)
 	background = Background:new(tiles)
 	player = Player:new()
 	monster = Monster:new()
+	print('monster:', monster.buffer)
 end
 
 
@@ -26,14 +28,13 @@ function love.update(dt)
 	player:update(dt)
 	monster:update(dt)
 
-	if player:collides(monster, 5) then
-		player:setAction('recoil', monster)
+	for _, e1 in pairs(Entity.instances) do
+		for _, e2 in pairs(Entity.instances) do
+			if e1 ~= e2 and e1:intersects(e2) then
+				e1:collide(dt, e2)
+			end
+		end
 	end
-
-	if love.keyboard.isDown('q') then
-		love.event.push('quit')
-	end
-
 end
 
 
@@ -42,4 +43,7 @@ function love.draw(dt)
 	background:draw()
 	monster:draw()
 	player:draw()
+	if player.sword then
+		player.sword:draw()
+	end
 end

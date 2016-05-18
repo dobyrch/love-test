@@ -2,7 +2,7 @@ subclass = require 'subclass'
 Entity = require 'entity'
 
 
-local Monster = subclass(Entity)
+local Monster = subclass(Entity, {alignment='bad'})
 
 
 function Monster:new()
@@ -11,7 +11,20 @@ function Monster:new()
 	instance:setAction('walk')
 	instance.speed = 30
 	instance.steps = 0
+	instance.damage = 1
+	instance.buffer = 5
+	instance.harmable = true
+	instance.health = 3
 	return instance
+end
+
+
+function Monster:harm(dt, other)
+	if other.action ~= 'recoil' then
+		other:setAction('recoil', self)
+		other.health = other.health - self.damage
+		print(other.health)
+	end
 end
 
 

@@ -2,7 +2,13 @@ subclass = require 'subclass'
 Object = require 'object'
 
 
-local Entity = subclass(Object, {images={}})
+local instances={}
+local Entity = subclass(Object, {
+	images={},
+	instances={},
+	alignment='neutral',
+})
+setmetatable(Entity.instances, {__mode='v'})
 
 
 -- TODO: Pass arguments as table?
@@ -16,12 +22,14 @@ local Entity = subclass(Object, {images={}})
 -- }
 function Entity:new(image, quads, x, y, width, height)
 	local instance = self:super()
+	table.insert(self.instances, instance)
 
 	instance.x = x
 	instance.y = y
 	instance.width = width
 	instance.height = height
 	instance.q = 1
+	instance.buffer = 0
 	instance.quads = {}
 	instance.timers = {}
 
@@ -59,15 +67,36 @@ end
 
 
 -- TODO: check if both entities are collidable
-function Entity:collides(other, buffer)
-	buffer = buffer or 0
-
+function Entity:intersects(other)
 	return not (
-		self.x > other.x + other.width - buffer or
-		other.x > self.x + self.width - buffer or
-		self.y > other.y + other.height - buffer or
-		other.y > self.y + self.height - buffer
+		self.x > other.x + other.width - self.buffer or
+		other.x > self.x + self.width - self.buffer or
+		self.y > other.y + other.height - self.buffer or
+		other.y > self.y + self.height - self.buffer
 	)
+end
+
+
+function Entity:collide(dt, other)
+	if self.harm and other.harmable then
+		self:harm(dt, other)
+	end
+end
+
+
+function Entity:recoil(dt, other)
+	self.shader = shader.damaged
+	self.shader:send('time', self.time)
+
+	if self.time < 0.300 then
+		self:callAction('bump', dt, other)
+	elseif self.time < 0.800 then
+		self:callAction('walk', dt)
+	else
+		self.time = 0
+		self.shader = nil
+		self:setAction('walk')
+	end
 end
 
 
@@ -132,11 +161,15 @@ function Entity:bump(dt, other)
 	ymag = (cy - ocy)/mag
 
 	local oldx, oldy = self.x, self.y
-	self.x = self.x + dt*xmag*self.speed*4/3
-	self.y = self.y + dt*ymag*self.speed*4/3
 
+	self.x = self.x + dt*xmag*self.speed*4/3
 	if not self:inBounds() then
-		self.x, self.y = oldx, oldy
+		self.x = oldx
+	end
+
+	self.y = self.y + dt*ymag*self.speed*4/3
+	if not self:inBounds() then
+		self.y = oldy
 	end
 end
 

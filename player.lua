@@ -1,9 +1,10 @@
 subclass = require 'subclass'
 Entity = require 'entity'
+Sword = require 'sword'
 shader = require 'shader'
 
 
-local Player = subclass(Entity)
+local Player = subclass(Entity, {alignment='good'})
 
 
 function Player:new()
@@ -12,21 +13,33 @@ function Player:new()
 	instance:setAction('walk')
 	instance.speed = 60
 	instance.q = 7
+	instance.health = 10
+	instance.harmable = true
 	return instance
 end
 
 
-function Player:recoil(dt, other)
-	self.shader = shader.damaged
-	self.shader:send('time', self.time)
+function Player:swing(dt)
+	if not self.sword then
+		self.sword = Sword:new()
+	end
 
-	if self.time < 0.300 then
-		self:callAction('bump', dt, other)
-	elseif self.time < 0.800 then
-		self:callAction('walk', dt)
+	if self.time < 0.033 then
+		self.sword.q = 1
+		self.sword.x = self.x
+		self.sword.y = self.y - self.height
+	elseif self.time < 0.083 then
+		self.sword.q = 2
+		self.sword.x = self.x + self.width
+		self.sword.y = self.y - self.height
+	elseif self.time < 0.217 then
+		self.sword.q = 3
+		self.sword.x = self.x + self.width
+		self.sword.y = self.y
 	else
 		self.time = 0
-		self.shader = nil
+		self.sword.x, self.sword.y = 1000, 1000
+		self.sword = nil
 		self:setAction('walk')
 	end
 end
@@ -37,6 +50,9 @@ function Player:walk(dt)
 
 	local dx, dy = 0, 0
 	oldquad = self.quad
+	if love.keyboard.isDown('k') then
+		self:setAction('swing')
+	end
 	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
 		dy = self.speed * dt
 		if self.time < 0.125 then
