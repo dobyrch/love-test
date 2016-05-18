@@ -44,7 +44,6 @@ function Animation:new(filename, ...)
 	end
 
 	while #instance.timings < width/DIM do
-		print(#instance.timings)
 		table.insert(instance.timings, instance.timings[#instance.timings])
 	end
 
@@ -53,11 +52,6 @@ end
 
 
 function Animation:update(dt)
-	--[[
-	print('time:', self.time, self.time + dt)
-	print('timing:', self.timings[self.frame])
-	print()
-	--]]
 	local ready = self.time < self.timings[self.frame]
 		and self.time + dt >= self.timings[self.frame]
 
