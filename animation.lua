@@ -68,4 +68,15 @@ function Animation:getFrame(dir)
 end
 
 
+function Animation:getLength()
+	local length = 0
+
+	for i, t in ipairs(self.timings) do
+		length = length + t
+	end
+
+	return length
+end
+
+
 return Animation

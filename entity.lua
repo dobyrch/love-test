@@ -58,6 +58,8 @@ end
 -- TODO: check if both entities are collidable
 function Entity:intersects(other)
 	return not (
+		self.deleted or
+		other.deleted or
 		self.x > other.x + other.width - self.buffer or
 		other.x > self.x + self.width - self.buffer or
 		self.y > other.y + other.height - self.buffer or
@@ -180,5 +182,10 @@ function Entity:dirVector()
 	return unpack(self.dirs[self.dir])
 end
 
+
+function Entity:delete()
+	self.deleted = true
+	self = nil
+end
 
 return Entity

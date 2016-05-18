@@ -26,6 +26,9 @@ function love.update(dt)
 	background:update(dt)
 	player:update(dt)
 	monster:update(dt)
+	if player.sword then
+		player.sword:update(dt)
+	end
 
 	for _, e1 in pairs(Entity.instances) do
 		for _, e2 in pairs(Entity.instances) do
