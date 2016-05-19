@@ -106,7 +106,6 @@ function Entity:update(dt)
 	if self.action then
 		self:action_func(dt)
 	end
-
 	if self.animation then
 		self.animation:update(dt)
 	end
@@ -126,9 +125,13 @@ function Entity:setAction(action, ...)
 			self.tmp[k] = nil
 		end
 
+		-- First call to action func with time == 0 gives action
+		-- a chance to set up (create animations, subentities, etc)
+		action_func(self, 0, ...)
+
 		self.action_func = function(self, dt)
-			action_func(self, dt, unpack(args))
 			self.time = self.time + dt
+			action_func(self, dt, unpack(args))
 		end
 	else
 		error('Unknown action "' .. action .. '"', 2)

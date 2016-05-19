@@ -9,7 +9,6 @@ function Monster:new()
 	local instance
 	instance = self:super()
 	instance.animation = Animation:new('octorok.png', 0.125)
-	instance:setAction('walk')
 	instance.x = 70
 	instance.y = 70
 	instance.speed = 30
@@ -18,6 +17,7 @@ function Monster:new()
 	instance.buffer = 5
 	instance.harmable = true
 	instance.health = 3
+	instance:setAction('walk')
 	return instance
 end
 
