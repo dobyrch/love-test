@@ -7,9 +7,9 @@ local Sword = subclass(Entity)
 
 
 function Sword:new()
-	local instance = self:super('sword.png', 8, 0, 0, 16, 16)
+	local instance = self:super('sword.png')
 	instance.damage = 1
-	instance.animation = Animation:new('sword.png', 0.033, 0.050, 0.134)
+	instance.animation = Animation:new('sword.png')
 	return instance
 end
 

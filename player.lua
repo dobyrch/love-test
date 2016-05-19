@@ -30,7 +30,7 @@ function Player:swing(dt)
 		sword.y = self.y
 		sword:setDir(self.dir)
 
-		self.animation = Animation:new('swing.png', math.huge)
+		self.animation = Animation:new('swing.png')
 
 
 		local xtab, ytab
@@ -91,12 +91,12 @@ function Player:walk(dt)
 
 	if not dt then
 		local timing
+		self.animation = Animation:new('link.png')
+
 		if dx == 0 and dy == 0 then
 			timing = math.huge
-			self.animation = Animation:new('link.png', math.huge)
 		else
 			timing = 0.133
-			self.animation = Animation:new('link.png', 0.133)
 			self.animation.frame = 2
 		end
 

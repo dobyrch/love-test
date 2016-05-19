@@ -9,7 +9,7 @@ local Monster = subclass(Entity, {alignment='bad'})
 function Monster:new()
 	local instance
 	instance = self:super()
-	instance.animation = Animation:new('octorok.png', 0.125)
+	instance.animation = Animation:new('octorok.png')
 	instance.x = 70
 	instance.y = 70
 	instance.speed = 30
@@ -32,7 +32,6 @@ end
 
 function Monster:walk(dt)
 	if not dt then
-		self.animation = Animation:new('octorok.png', 0.125)
 		self.animation.frame = 2
 		return
 	end
@@ -58,7 +57,7 @@ end
 
 function Monster:stand(dt)
 	if not dt then
-		self.animation = Animation:new('octorok.png', math.huge)
+		self.animation.frame = 1
 	end
 
 	if self.time > 0.5 then
