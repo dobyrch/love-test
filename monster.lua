@@ -1,4 +1,5 @@
 subclass = require 'subclass'
+Animation = require 'animation'
 Entity = require 'entity'
 
 
@@ -12,7 +13,6 @@ function Monster:new()
 	instance.x = 70
 	instance.y = 70
 	instance.speed = 30
-	instance.steps = 0
 	instance.damage = 1
 	instance.buffer = 5
 	instance.harmable = true
@@ -32,26 +32,18 @@ end
 
 function Monster:walk(dt)
 	if not dt then
+		self.animation = Animation:new('octorok.png', 0.125)
+		self.animation.frame = 2
 		return
 	end
 
-	while self.time > 0.125 do
-		self.steps = self.steps + 1
-		self.time = self.time - 0.125
-
-		if self.steps < 0 then
-			break
-		end
-
-		if self.steps > 6 or self.steps > 1 and love.math.random() < 0.15 then
-			self.steps = -3
-			self:setDir()
-		end
+	if self.time > 0.25 * math.random(2, 6) then
+		self:setAction('stand')
 	end
 
 	local xdir, ydir = self:dirVector()
 
-	if self:inBounds() and self.steps >= 0 then
+	if self:inBounds() then
 		self.x = self.x + self.speed*dt*xdir
 		self.y = self.y + self.speed*dt*ydir
 
@@ -60,8 +52,18 @@ function Monster:walk(dt)
 	if not self:inBounds() then
 		self.x = self.x - self.speed*dt*xdir
 		self.y = self.y - self.speed*dt*ydir
-		self.steps = 0
+	end
+end
+
+
+function Monster:stand(dt)
+	if not dt then
+		self.animation = Animation:new('octorok.png', math.huge)
+	end
+
+	if self.time > 0.5 then
 		self:setDir()
+		self:setAction('walk')
 	end
 end
 
