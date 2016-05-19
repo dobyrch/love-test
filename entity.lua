@@ -1,4 +1,4 @@
-local shader = require 'shader'
+local Effect = require 'effect'
 local subclass = require 'subclass'
 local Object = require 'object'
 local Animation = require 'animation'
@@ -78,25 +78,20 @@ function Entity:recoil(dt, other)
 	-- TODO: Create Shader obj with its own timer;
 	-- shader persists across setAction()
 	if not dt then
-		self.shader = shader.damaged
+		self.effect = Effect:new('damaged', 0.800)
 	end
-
-	self.shader:send('time', self.time)
 
 	if self.time < 0.300 then
 		self:callAction('bump', dt, other)
 	elseif self.time < 0.800 then
-		self:callAction('walk', dt)
-	else
-		self.shader = nil
-		self:setAction('walk')
+		self:setAction('walk', dt)
 	end
 end
 
 
 function Entity:draw()
 	if self.animation then
-		love.graphics.setShader(self.shader)
+		love.graphics.setShader(self.effect and self.effect.shader)
 		local image, quad = self.animation:getFrame(self.dir)
 		love.graphics.draw(image, quad, self.x, self.y)
 		love.graphics.setShader(nil)
@@ -109,8 +104,13 @@ function Entity:update(dt)
 	if self.action then
 		self:action_func(dt)
 	end
+
 	if self.animation then
 		self.animation:update(dt)
+	end
+
+	if self.effect then
+		self.effect:update(dt)
 	end
 end
 
