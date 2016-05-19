@@ -2,7 +2,7 @@ local subclass = require 'subclass'
 local Animation = require 'animation'
 local Entity = require 'entity'
 local Sword = require 'sword'
-local Synchronizer = require 'synchronizer'
+local Scheduler = require 'scheduler'
 
 
 local Player = subclass(Entity, {alignment='good'})
@@ -22,48 +22,46 @@ end
 
 
 function Player:swing(dt)
-	local one, two, three
-	local sword = self.tmp.sword
-
 	if not dt then
+		local sword, one, two, three
+		self.tmp.sword = Sword:new()
+		sword = self.tmp.sword
+		sword.x = self.x
+		sword.y = self.y
+		sword:setDir(self.dir)
+
 		self.animation = Animation:new('swing.png', math.huge)
 
 
 		local xtab, ytab
-		function one()
-			xtab = {down = -1, up = 1, right = 0, left = 0}
-			ytab = {down = 0, up = 0, right = -1, left = -1}
-			sword.x = sword.x + xtab[sword.dir]*self.width
-			sword.y = sword.y + ytab[sword.dir]*self.width
-		end
+		xtab = {down = -1, up = 1, right = 0, left = 0}
+		ytab = {down = 0, up = 0, right = -1, left = -1}
+		sword.x = sword.x + xtab[sword.dir]*self.width
+		sword.y = sword.y + ytab[sword.dir]*self.width
 
-		function two()
+		function one()
 			xtab = {down = 0, up = 0, right = 1, left = -1}
 			ytab = {down = 1, up = -1, right = 0, left = 0}
 			sword.x = sword.x + xtab[sword.dir]*self.width
 			sword.y = sword.y + ytab[sword.dir]*self.width
+			sword.animation:nextFrame()
 		end
 
-		function three()
+		function two()
 			xtab = {down = 1, up = -1, right = 0, left = 0}
 			ytab = {down = 0, up = 0, right = 1, left = 1}
 			sword.x = sword.x + xtab[sword.dir]*self.width
 			sword.y = sword.y + ytab[sword.dir]*self.width
+			sword.animation:nextFrame()
 		end
-	end
+		function three()
+			self:setAction('walk')
+		end
 
-	if not sword then
-		sword = Sword:new()
-		sword.x = self.x
-		sword.y = self.y
-		sword:setDir(self.dir)
-		self.tmp.sword = sword
-
-		self.tmp.sync = Synchronizer:new(sword.animation, one, two, three)
-	end
-
-	if self.time >= self.tmp.sword.animation:getLength() then
-		self:setAction('walk')
+		self.scheduler = Scheduler:new(
+			{0.033, 0.050, 0.134},
+			{one, two, three}
+		)
 	end
 end
 
@@ -92,12 +90,24 @@ function Player:walk(dt)
 	end
 
 	if not dt then
+		local timing
 		if dx == 0 and dy == 0 then
+			timing = math.huge
 			self.animation = Animation:new('link.png', math.huge)
 		else
+			timing = 0.133
 			self.animation = Animation:new('link.png', 0.133)
 			self.animation.frame = 2
 		end
+
+		self.scheduler = Scheduler:new(
+			{timing},
+			{function()
+				self.animation:nextFrame()
+				self.scheduler.i = 1
+			end},
+			true
+		)
 
 		return
 	end

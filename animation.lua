@@ -54,6 +54,11 @@ function Animation:new(filename, ...)
 end
 
 
+function Animation:nextFrame()
+	self.frame = self.frame % #self.down + 1
+end
+
+
 function Animation:update(dt)
 	self.time = self.time + dt
 

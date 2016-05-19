@@ -1,0 +1,39 @@
+local subclass = require 'subclass'
+local Object = require 'object'
+
+local Scheduler = subclass(Object)
+
+
+function Scheduler:new(timings, events, loop)
+	local instance = self:super()
+	
+	if #timings ~= #events then
+		error('Length of arguments do not match', 2)
+	end
+
+	instance.timings = timings
+	instance.events = events
+	self.loop = loop
+	instance.time = 0
+	instance.i = 1
+
+	return instance
+end
+
+
+function Scheduler:update(dt)
+	self.time = self.time + dt
+
+	while self.i <= #self.timings and self.time > self.timings[self.i] do
+		self.events[self.i]()
+		self.time = self.time - self.timings[self.i]
+
+		if self.loop then
+			self.i = self.i % #self.timings + 1
+		else
+			self.i = self.i + 1
+		end
+	end
+end
+
+return Scheduler

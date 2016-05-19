@@ -105,12 +105,8 @@ function Entity:update(dt)
 		self:action_func(dt)
 	end
 
-	if self.tmp.sync then
-		self.tmp.sync:update(dt)
-	end
-
-	if self.animation then
-		self.animation:update(dt)
+	if self.scheduler then
+		self.scheduler:update(dt)
 	end
 
 	if self.effect then
