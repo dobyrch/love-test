@@ -1,7 +1,7 @@
-shader = require 'shader'
-subclass = require 'subclass'
-Object = require 'object'
-Animation = require 'animation'
+local shader = require 'shader'
+local subclass = require 'subclass'
+local Object = require 'object'
+local Animation = require 'animation'
 
 
 

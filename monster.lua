@@ -1,6 +1,6 @@
-subclass = require 'subclass'
-Animation = require 'animation'
-Entity = require 'entity'
+local subclass = require 'subclass'
+local Animation = require 'animation'
+local Entity = require 'entity'
 
 
 local Monster = subclass(Entity, {alignment='bad'})

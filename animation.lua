@@ -1,3 +1,6 @@
+local subclass = require 'subclass'
+local Object = require 'object'
+
 local Animation = subclass(Object, {images={}})
 setmetatable(Animation.images, {__mode='v'})
 

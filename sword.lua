@@ -1,4 +1,6 @@
-Entity = require 'entity'
+local subclass = require 'subclass'
+local Animation = require 'animation'
+local Entity = require 'entity'
 
 
 local Sword = subclass(Entity)

@@ -1,7 +1,7 @@
-Entity = require 'entity'
-Background = require 'background'
-Monster = require 'monster'
-Player = require 'player'
+local Entity = require 'entity'
+local Background = require 'background'
+local Monster = require 'monster'
+local Player = require 'player'
 
 local tiles = {
 	{1,2,2,2,2,2,2,2,2,3},

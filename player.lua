@@ -1,6 +1,7 @@
-subclass = require 'subclass'
-Entity = require 'entity'
-Sword = require 'sword'
+local subclass = require 'subclass'
+local Animation = require 'animation'
+local Entity = require 'entity'
+local Sword = require 'sword'
 
 
 local Player = subclass(Entity, {alignment='good'})
