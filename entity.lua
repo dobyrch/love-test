@@ -1,6 +1,8 @@
+shader = require 'shader'
 subclass = require 'subclass'
 Object = require 'object'
 Animation = require 'animation'
+
 
 
 local Entity = subclass(Object, {
@@ -36,6 +38,7 @@ function Entity:new()
 	instance.height = 16
 	instance.dir = 'down'
 	instance.buffer = 0
+	instance.time = 0
 	instance.tmp = {}
 
 	return instance
@@ -90,7 +93,7 @@ end
 
 
 function Entity:draw()
-	if not self.deleted then
+	if not self.deleted and self.animation then
 		love.graphics.setShader(self.shader)
 		local image, quad = self.animation:getFrame(self.dir)
 		love.graphics.draw(image, quad, self.x, self.y)
@@ -101,10 +104,12 @@ end
 
 
 function Entity:update(dt)
-	self.animation:update(dt)
 	if self.action then
-		self.time = self.time + dt
 		self:action_func(dt)
+	end
+
+	if self.animation then
+		self.animation:update(dt)
 	end
 end
 
@@ -124,6 +129,7 @@ function Entity:setAction(action, ...)
 
 		self.action_func = function(self, dt)
 			action_func(self, dt, unpack(args))
+			self.time = self.time + dt
 		end
 	else
 		error('Unknown action "' .. action .. '"', 2)
@@ -191,5 +197,6 @@ function Entity:delete()
 	self.deleted = true
 	self = nil
 end
+
 
 return Entity

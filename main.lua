@@ -15,10 +15,46 @@ local tiles = {
 	{7,8,8,8,8,8,8,8,8,9},
 }
 
+
+
 function love.load(arg)
 	background = Background:new(tiles)
 	player = Player:new()
 	monster = Monster:new()
+end
+
+function love.keypressed(key, scancode, isrepeat)
+	if key == 'escape' then
+		love.event.quit()
+	elseif key == 'up' or key == 'e' then
+		player:setAction('walk')
+		player.dir = 'up'
+	elseif key == 'down' or key == 'd' then
+		player:setAction('walk')
+		player.dir = 'down'
+	elseif key == 'right' or key == 'f' then
+		player:setAction('walk')
+		player.dir = 'right'
+	elseif key == 'left' or key == 's' then
+		player:setAction('walk')
+		player.dir = 'left'
+	elseif key == 'space' or key == 'k' then
+		player:setAction('swing')
+	end
+end
+
+function love.keyreleased(key, scancode)
+	if key == 'escape' then
+		love.event.quit()
+	elseif key == 'up' or key == 'e' then
+		player:setAction('walk')
+	elseif key == 'down' or key == 'd' then
+		player:setAction('walk')
+	elseif key == 'right' or key == 'f' then
+		player:setAction('walk')
+	elseif key == 'left' or key == 's' then
+		player:setAction('walk')
+	end
 end
 
 

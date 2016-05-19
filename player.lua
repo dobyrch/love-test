@@ -1,7 +1,6 @@
 subclass = require 'subclass'
 Entity = require 'entity'
 Sword = require 'sword'
-shader = require 'shader'
 
 
 local Player = subclass(Entity, {alignment='good'})
@@ -16,7 +15,6 @@ function Player:new()
 	instance.speed = 60
 	instance.health = 10
 	instance.harmable = true
-	instance.animation = Animation:new('link.png', 0.125)
 	return instance
 end
 
@@ -28,8 +26,6 @@ function Player:swing(dt)
 		self.tmp.sword.y = self.y
 		self.tmp.sword.dir = self.dir
 	end
-
-	self.time = self.time + dt
 
 	if self.time >= self.tmp.sword.animation:getLength() then
 		self:setAction('walk')
@@ -60,33 +56,35 @@ end
 
 
 function Player:walk(dt)
-
-	if self.time == 0 then
-		self.animation = Animation:new('link.png', 0.125)
-	end
-
-	self.time = self.time + dt
-
 	local dx, dy = 0, 0
+	local up =  love.keyboard.isDown('up','e')
+	local down = love.keyboard.isDown('down', 'd')
+	local right = love.keyboard.isDown('right','f')
+	local left = love.keyboard.isDown('left','s')
 
-	if love.keyboard.isDown('k') then
-		self:setAction('swing')
-	end
-	if love.keyboard.isDown('down','d') and not love.keyboard.isDown('up','e') then
+	if up and not down then
+		dy = -self.speed * dt
+		self.dir = 'up'
+	elseif down and not up then
 		dy = self.speed * dt
 		self.dir = 'down'
 	end
-	if love.keyboard.isDown('up','e') and not love.keyboard.isDown('down','d') then
-		dy = -self.speed * dt
-		self.dir = 'up'
-	end
-	if love.keyboard.isDown('right','f') and not love.keyboard.isDown('left','s') then
+
+	if right and not left then
 		dx = self.speed * dt
 		self.dir = 'right'
-	end
-	if love.keyboard.isDown('left','s') and not love.keyboard.isDown('right','f') then
+	elseif left and not right then
 		dx = -self.speed * dt
 		self.dir = 'left'
+	end
+
+	if self.time == 0 then
+		if dx == 0 and dy == 0 then
+			self.animation = Animation:new('link.png', math.huge)
+		else
+			self.animation = Animation:new('link.png', 0, 0.133, 0.133)
+		end
+
 	end
 
 	if dx ~= 0 and dy ~= 0 then

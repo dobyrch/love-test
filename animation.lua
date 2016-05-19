@@ -13,6 +13,7 @@ function Animation:new(filename, ...)
 	instance.right = {}
 	instance.left = {}
 	instance.frame = 1
+	instance.tind = 1
 	instance.time = 0
 	instance.timings = {...}
 
@@ -52,14 +53,15 @@ end
 
 
 function Animation:update(dt)
-	local ready = self.time < self.timings[self.frame]
-		and self.time + dt >= self.timings[self.frame]
-
-	if ready then
+	while self.time <= self.timings[self.tind]
+		and self.time + dt > self.timings[self.tind]
+	do
 		self.frame = self.frame % #self.down + 1
+		self.time = self.time - self.timings[self.tind]
+		self.tind = self.tind % #self.timings + 1
 	end
 
-	self.time = (self.time + dt) % self.timings[#self.timings]
+	self.time = self.time + dt
 end
 
 
