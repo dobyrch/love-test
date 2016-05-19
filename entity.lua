@@ -77,7 +77,10 @@ end
 function Entity:recoil(dt, other)
 	-- TODO: Create Shader obj with its own timer;
 	-- shader persists across setAction()
-	self.shader = shader.damaged
+	if self.time == 0 then
+		self.shader = shader.damaged
+	end
+
 	self.shader:send('time', self.time)
 
 	if self.time < 0.300 then
@@ -145,10 +148,11 @@ function Entity:callAction(action, dt, ...)
 	local saved_time = self.time
 	local saved_tmp = self.tmp
 
-	self:setAction(action, ...)
-	self:action_func(dt)
+	self[action](self, dt, ...)
+	--self:setAction(action, ...)
+	--self:action_func(dt)
 
-	self:setAction(saved_action)
+	--self:setAction(saved_action)
 	self.action_func = saved_func
 	self.time = saved_time
 	self.tmp = saved_tmp

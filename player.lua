@@ -9,8 +9,8 @@ local Player = subclass(Entity, {alignment='good'})
 function Player:new()
 	local instance
 	instance = self:super()
-	instance.x = 80
-	instance.y = 80
+	instance.x = 30
+	instance.y = 30
 	instance.speed = 60
 	instance.health = 10
 	instance.harmable = true
