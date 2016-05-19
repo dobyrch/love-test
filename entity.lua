@@ -16,7 +16,6 @@ local Entity = subclass(Object, {
 	},
 	alignment = 'neutral',
 })
-setmetatable(Entity.instances, {__mode='v'})
 
 
 -- TODO: Pass arguments as table?
@@ -30,7 +29,7 @@ setmetatable(Entity.instances, {__mode='v'})
 -- }
 function Entity:new()
 	local instance = self:super()
-	table.insert(self.instances, instance)
+	self.instances[instance] = true
 
 	instance.x = 0
 	instance.y = 0
@@ -60,8 +59,6 @@ end
 -- TODO: check if both entities are collidable
 function Entity:intersects(other)
 	return not (
-		self.deleted or
-		other.deleted or
 		self.x > other.x + other.width - self.buffer or
 		other.x > self.x + self.width - self.buffer or
 		self.y > other.y + other.height - self.buffer or
@@ -95,7 +92,7 @@ end
 
 
 function Entity:draw()
-	if not self.deleted and self.animation then
+	if self.animation then
 		love.graphics.setShader(self.shader)
 		local image, quad = self.animation:getFrame(self.dir)
 		love.graphics.draw(image, quad, self.x, self.y)
@@ -125,7 +122,7 @@ function Entity:setAction(action, ...)
 		self.time = 0
 
 		for k, v in pairs(self.tmp) do
-			v.deleted = true
+			self.instances[v] = nil
 			self.tmp[k] = nil
 		end
 
@@ -192,12 +189,6 @@ end
 
 function Entity:dirVector()
 	return unpack(self.dirs[self.dir])
-end
-
-
-function Entity:delete()
-	self.deleted = true
-	self = nil
 end
 
 

@@ -61,9 +61,9 @@ end
 function love.update(dt)
 	background:update(dt)
 
-	for _, e1 in pairs(Entity.instances) do
+	for e1 in pairs(Entity.instances) do
 		e1:update(dt)
-		for _, e2 in pairs(Entity.instances) do
+		for e2 in pairs(Entity.instances) do
 			if e1 ~= e2 and e1:intersects(e2) then
 				e1:collide(dt, e2)
 			end
@@ -77,7 +77,7 @@ function love.draw(dt)
 
 	background:draw()
 
-	for _, e in pairs(Entity.instances) do
+	for e in pairs(Entity.instances) do
 		e:draw()
 	end
 end
