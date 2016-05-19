@@ -25,7 +25,7 @@ function Player:swing(dt)
 		sword = Sword:new()
 		sword.x = self.x
 		sword.y = self.y
-		sword.dir = self.dir
+		sword:setDir(self.dir)
 		self.tmp.sword = sword
 	end
 
@@ -71,18 +71,18 @@ function Player:walk(dt)
 
 	if up and not down then
 		dy = -self.speed
-		self.dir = 'up'
+		self:setDir('up')
 	elseif down and not up then
 		dy = self.speed
-		self.dir = 'down'
+		self:setDir('down')
 	end
 
 	if right and not left then
 		dx = self.speed
-		self.dir = 'right'
+		self:setDir('right')
 	elseif left and not right then
 		dx = -self.speed
-		self.dir = 'left'
+		self:setDir('left')
 	end
 
 	if not dt then
