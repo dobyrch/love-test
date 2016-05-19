@@ -1,6 +1,7 @@
 local subclass = require 'subclass'
 local Animation = require 'animation'
 local Entity = require 'entity'
+local Scheduler = require 'scheduler'
 
 
 local Monster = subclass(Entity, {alignment='bad'})
@@ -33,6 +34,13 @@ end
 function Monster:walk(dt)
 	if not dt then
 		self.animation.frame = 2
+
+		self.scheduler = Scheduler:new(
+			{0.125},
+			{function() self.animation:nextFrame() end},
+			true
+		)
+
 		return
 	end
 
@@ -57,6 +65,7 @@ end
 
 function Monster:stand(dt)
 	if not dt then
+		self.scheduler = nil
 		self.animation.frame = 1
 	end
 

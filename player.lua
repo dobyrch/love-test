@@ -32,7 +32,6 @@ function Player:swing(dt)
 
 		self.animation = Animation:new('swing.png')
 
-
 		local xtab, ytab
 		xtab = {down = -1, up = 1, right = 0, left = 0}
 		ytab = {down = 0, up = 0, right = -1, left = -1}
