@@ -20,38 +20,41 @@ end
 
 
 function Player:swing(dt)
-	if not self.tmp.sword then
-		self.tmp.sword = Sword:new()
-		self.tmp.sword.x = self.x
-		self.tmp.sword.y = self.y
-		self.tmp.sword.dir = self.dir
+	local sword = self.tmp.sword
+	if not sword then
+		sword = Sword:new()
+		sword.x = self.x
+		sword.y = self.y
+		sword.dir = self.dir
+		self.tmp.sword = sword
 	end
 
 	if self.time >= self.tmp.sword.animation:getLength() then
 		self:setAction('walk')
 	end
 
-	--[[
-	local qtab, xtab, ytab
-	if self.time > 0.217 then
-		xtab = {-self.width,-self.width, self.width,self.width, 0,0, 0,0}
-		ytab = {0,0, 0,0, -self.height,-self.height, -self.height,-self.height}
-		self.sword.animation:nextFrame(dt)
-	elseif self.time > 0.083 then
-		xtab = {-self.width,-self.width, self.width,self.width, self.width,self.width, -self.width,-self.width}
-		ytab = {self.height,self.height, -self.height,-self.height, -self.height,-self.height, -self.height,-self.height}
-		self.sword.animation:nextFrame(dt)
-	elseif self.time > 0.033 then
-		qtab = {3,3, 6,6, 9,9, 12,12}
-		xtab = {0,0, 0,0, self.width,self.width, -self.width,-self.width}
-		ytab = {self.height,self.height, -self.height,-self.height, 0,0, 0,0}
-		self.sword.animation:nextFrame(dt)
-	else
-		self.sword.x, self.sword.y = 1000, 1000
-		self.sword = nil
-		self:setAction('walk')
+	local xtab, ytab
+	if sword.animation.frame == 1 and not sword.tmp.did1 then
+		xtab = {down = -1, up = 1, right = 0, left = 0}
+		ytab = {down = 0, up = 0, right = -1, left = -1}
+		sword.x = sword.x + xtab[sword.dir]*self.width
+		sword.y = sword.y + ytab[sword.dir]*self.width
+		sword.tmp.did1 = true
+
+	elseif sword.animation.frame == 2 and not sword.tmp.did2 then
+		xtab = {down = 0, up = 0, right = 1, left = -1}
+		ytab = {down = 1, up = -1, right = 0, left = 0}
+		sword.x = sword.x + xtab[sword.dir]*self.width
+		sword.y = sword.y + ytab[sword.dir]*self.width
+		sword.tmp.did2 = true
+
+	elseif sword.animation.frame == 3 and not sword.tmp.did3 then
+		xtab = {down = 1, up = -1, right = 0, left = 0}
+		ytab = {down = 0, up = 0, right = 1, left = 1}
+		sword.x = sword.x + xtab[sword.dir]*self.width
+		sword.y = sword.y + ytab[sword.dir]*self.width
+		sword.tmp.did3 = true
 	end
-	--]]
 end
 
 

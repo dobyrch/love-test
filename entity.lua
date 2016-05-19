@@ -78,6 +78,8 @@ end
 
 
 function Entity:recoil(dt, other)
+	-- TODO: Create Shader obj with its own timer;
+	-- shader persists across setAction()
 	self.shader = shader.damaged
 	self.shader:send('time', self.time)
 
