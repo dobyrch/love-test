@@ -29,7 +29,7 @@ function Player:swing(dt)
 		self.tmp.sword = sword
 	end
 
-	if self.time == 0 then
+	if not dt then
 		self.animation = Animation:new('swing.png', math.huge)
 	end
 
@@ -84,7 +84,8 @@ function Player:walk(dt)
 		dx = -self.speed
 		self.dir = 'left'
 	end
-	if self.time == 0 then
+
+	if not dt then
 		if dx == 0 and dy == 0 then
 			self.animation = Animation:new('link.png', math.huge)
 		else
@@ -92,6 +93,7 @@ function Player:walk(dt)
 			self.animation.frame = 2
 		end
 
+		return
 	end
 
 	dx, dy = dt*dx, dt*dy

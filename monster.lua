@@ -31,6 +31,10 @@ end
 
 
 function Monster:walk(dt)
+	if not dt then
+		return
+	end
+
 	while self.time > 0.125 do
 		self.steps = self.steps + 1
 		self.time = self.time - 0.125

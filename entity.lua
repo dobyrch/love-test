@@ -77,7 +77,7 @@ end
 function Entity:recoil(dt, other)
 	-- TODO: Create Shader obj with its own timer;
 	-- shader persists across setAction()
-	if self.time == 0 then
+	if not dt then
 		self.shader = shader.damaged
 	end
 
@@ -130,7 +130,7 @@ function Entity:setAction(action, ...)
 
 		-- First call to action func with time == 0 gives action
 		-- a chance to set up (create animations, subentities, etc)
-		action_func(self, 0, ...)
+		action_func(self, nil, ...)
 
 		self.action_func = function(self, dt)
 			self.time = self.time + dt
@@ -160,6 +160,10 @@ end
 
 
 function Entity:bump(dt, other)
+	if not dt then
+		return
+	end
+
 	local cx, cy, ocx, ocy, mag, xmag, ymag
 
 	cx, cy = self:center()
