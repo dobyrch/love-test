@@ -53,15 +53,13 @@ end
 
 
 function Animation:update(dt)
-	while self.time <= self.timings[self.tind]
-		and self.time + dt > self.timings[self.tind]
-	do
+	self.time = self.time + dt
+
+	while self.time > self.timings[self.tind] do
 		self.frame = self.frame % #self.down + 1
 		self.time = self.time - self.timings[self.tind]
 		self.tind = self.tind % #self.timings + 1
 	end
-
-	self.time = self.time + dt
 end
 
 
