@@ -2,6 +2,7 @@ local subclass = require 'subclass'
 local Animation = require 'animation'
 local Entity = require 'entity'
 local Sword = require 'sword'
+local Synchronizer = require 'synchronizer'
 
 
 local Player = subclass(Entity, {alignment='good'})
@@ -21,44 +22,48 @@ end
 
 
 function Player:swing(dt)
+	local one, two, three
 	local sword = self.tmp.sword
+
+	if not dt then
+		self.animation = Animation:new('swing.png', math.huge)
+
+
+		local xtab, ytab
+		function one()
+			xtab = {down = -1, up = 1, right = 0, left = 0}
+			ytab = {down = 0, up = 0, right = -1, left = -1}
+			sword.x = sword.x + xtab[sword.dir]*self.width
+			sword.y = sword.y + ytab[sword.dir]*self.width
+		end
+
+		function two()
+			xtab = {down = 0, up = 0, right = 1, left = -1}
+			ytab = {down = 1, up = -1, right = 0, left = 0}
+			sword.x = sword.x + xtab[sword.dir]*self.width
+			sword.y = sword.y + ytab[sword.dir]*self.width
+		end
+
+		function three()
+			xtab = {down = 1, up = -1, right = 0, left = 0}
+			ytab = {down = 0, up = 0, right = 1, left = 1}
+			sword.x = sword.x + xtab[sword.dir]*self.width
+			sword.y = sword.y + ytab[sword.dir]*self.width
+		end
+	end
+
 	if not sword then
 		sword = Sword:new()
 		sword.x = self.x
 		sword.y = self.y
 		sword:setDir(self.dir)
 		self.tmp.sword = sword
-	end
 
-	if not dt then
-		self.animation = Animation:new('swing.png', math.huge)
+		self.tmp.sync = Synchronizer:new(sword.animation, one, two, three)
 	end
 
 	if self.time >= self.tmp.sword.animation:getLength() then
 		self:setAction('walk')
-	end
-
-	local xtab, ytab
-	if sword.animation.frame == 1 and not sword.tmp.did1 then
-		xtab = {down = -1, up = 1, right = 0, left = 0}
-		ytab = {down = 0, up = 0, right = -1, left = -1}
-		sword.x = sword.x + xtab[sword.dir]*self.width
-		sword.y = sword.y + ytab[sword.dir]*self.width
-		sword.tmp.did1 = true
-
-	elseif sword.animation.frame == 2 and not sword.tmp.did2 then
-		xtab = {down = 0, up = 0, right = 1, left = -1}
-		ytab = {down = 1, up = -1, right = 0, left = 0}
-		sword.x = sword.x + xtab[sword.dir]*self.width
-		sword.y = sword.y + ytab[sword.dir]*self.width
-		sword.tmp.did2 = true
-
-	elseif sword.animation.frame == 3 and not sword.tmp.did3 then
-		xtab = {down = 1, up = -1, right = 0, left = 0}
-		ytab = {down = 0, up = 0, right = 1, left = 1}
-		sword.x = sword.x + xtab[sword.dir]*self.width
-		sword.y = sword.y + ytab[sword.dir]*self.width
-		sword.tmp.did3 = true
 	end
 end
 
