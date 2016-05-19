@@ -82,7 +82,8 @@ function Player:walk(dt)
 		if dx == 0 and dy == 0 then
 			self.animation = Animation:new('link.png', math.huge)
 		else
-			self.animation = Animation:new('link.png', 0, 0.133, 0.133)
+			self.animation = Animation:new('link.png', 0.133)
+			self.animation.frame = 2
 		end
 
 	end
