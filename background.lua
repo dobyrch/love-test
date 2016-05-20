@@ -1,63 +1,69 @@
-local Background = {time=0, fq=1}
+local Background = {}
 
-local grass, grass_w, grass_h, grass_quads
-local flowers, flower_w, flower_h, flower_quads
-local quadinfo
+local palette = {
+	['**'] = 'flower',
+	['  '] = 'grass',
+	['--'] = 'grass_top',
+	['__'] = 'grass_bot',
+	[' |'] = 'grass_right',
+	['| '] = 'grass_left',
+	['|-'] = 'grass_topleft',
+	['-|'] = 'grass_topright',
+	['|_'] = 'grass_botleft',
+	['_|'] = 'grass_botright',
+	['=='] = 'grass_strip',
+	[',,'] = 'grass_light',
+	['!!'] = 'fence',
+	['<^'] = 'tree_topleft',
+	['^>'] = 'tree_topright',
+	['m^'] = 'tree_botleft',
+	['^m'] = 'tree_botright',
+	['::'] = 'path',
+	['()'] = 'window',
+	['[]'] = 'door',
+	['~~'] = 'roof',
+}
+
+local map = [[
+^m| ==============  
+-- |!!!!!!!!!!!!!!| 
+   |!!,,,,,,,,<^^>,,
+  **!!,,~~~~~~m^^m,,
+   |!!,,()[](),,!!| 
+   |!!,,,,::,,,,!!| 
+___|!!!!!!::!!!!!!| 
+::::::::::::|-----  
+----========__**__  
+]]
+
+map = map:gsub('\n', '')
+
 
 
 function Background:new(tiles)
-	instance = {tiles=tiles}
-	setmetatable(instance, self)
-	self.__index = self
-	return instance
-end
 
-
-function Background:update(dt)
-	self.time = self.time + dt
-	while self.time >= 0.40 do
-		self.time = self.time - 0.40
-		self.fq = self.fq%4 + 1
+	self.images = {}
+	for k, v in pairs(palette) do
+		self.images[k] = love.graphics.newImage('assets/' .. v .. '.png')
+		self.images[k]:setFilter('linear', 'nearest')
 	end
+
+	return self
 end
 
 
+local sixteen = love.graphics.newQuad(0, 0, 16, 16, 16, 16)
 function Background:draw()
-	for i, row in ipairs(self.tiles) do
-		for j, num in ipairs(row) do
-			local x, y = (j-1)*16, (i-1)*16
-			if num == 0 then
-				love.graphics.draw(flowers, flower_quads[self.fq], x, y)
-			else
-				love.graphics.draw(grass, grass_quads[num], x, y, 0)
+	local row, col = 0, 0
+	map:gsub('..',
+		function(tile)
+			love.graphics.draw(self.images[tile], sixteen, col*16, row*16)
+			col = (col + 1) % 10
+			if col == 0 then
+				row = row+1
 			end
 		end
-	end
-end
-
-
-grass = love.graphics.newImage('assets/grass.png')
-grass:setFilter('linear', 'nearest')
-grass_w, grass_h = grass:getWidth(), grass:getHeight()
-quadinfo = {
-	{0,  0}, {17,  0}, {34,  0},
-	{0, 17}, {17, 17}, {34, 17},
-	{0, 34}, {17, 34}, {34, 34},
-}
-grass_quads = {}
-for i, qi in ipairs(quadinfo) do
-	grass_quads[i] = love.graphics.newQuad(qi[1], qi[2], 16, 16, grass_w, grass_h)
-end
-
-flowers = love.graphics.newImage('assets/flowers.png')
-flowers:setFilter('linear', 'nearest')
-flower_w, flower_h = flowers:getWidth(), flowers:getHeight()
-flower_quads = {}
-quadinfo = {
-	{0, 0}, {17, 0}, {34, 0}, {51, 0},
-}
-for i, qi in ipairs(quadinfo) do
-	flower_quads[i] = love.graphics.newQuad(qi[1], qi[2], 16, 16, flower_w, flower_h)
+	)
 end
 
 

@@ -3,22 +3,8 @@ local Background = require 'background'
 local Monster = require 'monster'
 local Player = require 'player'
 
-local tiles = {
-	{1,2,2,2,2,2,2,2,2,3},
-	{4,5,5,0,5,5,0,5,5,6},
-	{4,5,5,5,5,5,5,5,5,6},
-	{4,5,0,5,5,5,5,0,5,6},
-	{4,5,5,5,5,5,5,5,5,6},
-	{4,5,5,5,0,5,5,5,0,6},
-	{4,5,0,5,5,5,5,5,5,6},
-	{4,5,5,5,5,5,5,0,5,6},
-	{7,8,8,8,8,8,8,8,8,9},
-}
-
-
-
 function love.load(arg)
-	background = Background:new(tiles)
+	background = Background:new()
 	player = Player:new()
 	monster = Monster:new()
 end
@@ -59,8 +45,6 @@ end
 
 
 function love.update(dt)
-	background:update(dt)
-
 	for e1 in pairs(Entity.instances) do
 		e1:update(dt)
 		for e2 in pairs(Entity.instances) do
@@ -72,7 +56,7 @@ function love.update(dt)
 end
 
 
-function love.draw(dt)
+function love.draw()
 	love.graphics.scale(4, 4)
 
 	background:draw()

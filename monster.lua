@@ -11,8 +11,8 @@ function Monster:new()
 	local instance
 	instance = self:super()
 	instance.animation = Animation:new('octorok.png')
-	instance.x = 70
-	instance.y = 70
+	instance.x = 112
+	instance.y = 112
 	instance.speed = 30
 	instance.damage = 1
 	instance.buffer = 5
