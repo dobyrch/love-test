@@ -56,7 +56,9 @@ function love.update(dt)
 
 		for _, e2 in ipairs(Static:nearby(e1)) do
 			if e1:intersects(e2) and e2.solid then
-				e1:setAction('push', e2)
+				if e1.push then
+					e1:setAction('push', e2)
+				end
 			end
 		end
 	end
