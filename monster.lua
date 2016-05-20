@@ -1,10 +1,10 @@
 local subclass = require 'subclass'
 local Animation = require 'animation'
-local Entity = require 'entity'
+local Kinetic = require 'kinetic'
 local Scheduler = require 'scheduler'
 
 
-local Monster = subclass(Entity, {alignment='bad'})
+local Monster = subclass(Kinetic, {alignment='bad'})
 
 
 function Monster:new()

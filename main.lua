@@ -1,4 +1,5 @@
-local Entity = require 'entity'
+local Kinetic = require 'kinetic'
+local Static = require 'static'
 local Background = require 'background'
 local Monster = require 'monster'
 local Player = require 'player'
@@ -6,7 +7,7 @@ local Player = require 'player'
 function love.load(arg)
 	background = Background:new()
 	player = Player:new()
-	monster = Monster:new()
+	--monster = Monster:new()
 end
 
 function love.keypressed(key, scancode, isrepeat)
@@ -45,11 +46,17 @@ end
 
 
 function love.update(dt)
-	for e1 in pairs(Entity.instances) do
+	for e1 in pairs(Kinetic.instances) do
 		e1:update(dt)
-		for e2 in pairs(Entity.instances) do
+		for e2 in pairs(Kinetic.instances) do
 			if e1 ~= e2 and e1:intersects(e2) then
 				e1:collide(dt, e2)
+			end
+		end
+
+		for _, e2 in ipairs(Static:nearby(e1)) do
+			if e1:intersects(e2) and e2.solid then
+				e1:setAction('push', e2)
 			end
 		end
 	end
@@ -59,9 +66,14 @@ end
 function love.draw()
 	love.graphics.scale(4, 4)
 
-	background:draw()
+	-- Add generator for iterating over statics
+	for xy, tab in pairs(Static.instances) do
+		for _, e in ipairs(tab) do
+			e:draw()
+		end
+	end
 
-	for e in pairs(Entity.instances) do
+	for e in pairs(Kinetic.instances) do
 		e:draw()
 	end
 end

@@ -1,9 +1,9 @@
 local subclass = require 'subclass'
 local Animation = require 'animation'
-local Entity = require 'entity'
+local Kinetic = require 'kinetic'
 
 
-local Sword = subclass(Entity)
+local Sword = subclass(Kinetic)
 
 
 function Sword:new()

@@ -1,11 +1,11 @@
 local subclass = require 'subclass'
 local Animation = require 'animation'
-local Entity = require 'entity'
+local Kinetic = require 'kinetic'
 local Sword = require 'sword'
 local Scheduler = require 'scheduler'
 
 
-local Player = subclass(Entity, {alignment='good'})
+local Player = subclass(Kinetic, {alignment='good'})
 
 
 function Player:new()
@@ -17,7 +17,25 @@ function Player:new()
 	instance.health = 10
 	instance.harmable = true
 	instance:setAction('walk')
+	instance.buffer = 3
 	return instance
+end
+
+
+function Player:push(dt, other)
+	local cx, cy, ocx, ocy, mag, xmag, ymag
+
+	while self:intersects(other) do
+		cx, cy = self:center()
+		ocx, ocy = other:center()
+
+		mag = math.sqrt((cx - ocx)^2 + (cy - ocy)^2)
+		xmag = (cx - ocx)/mag
+		ymag = (cy - ocy)/mag
+
+		self.x = self.x + xmag
+		self.y = self.y + ymag
+	end
 end
 
 

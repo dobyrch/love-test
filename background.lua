@@ -1,3 +1,7 @@
+local Animation = require 'animation'
+local Static = require 'static'
+
+
 local Background = {}
 
 local palette = {
@@ -24,6 +28,17 @@ local palette = {
 	['~~'] = 'roof',
 }
 
+local solid = {
+	fence = true,
+	tree_topleft = true,
+	tree_topright = true,
+	tree_botleft = true,
+	tree_botright = true,
+	window = true,
+	roof = true,
+}
+
+
 local map = [[
 ^m| ==============  
 -- |!!!!!!!!!!!!!!| 
@@ -40,24 +55,21 @@ map = map:gsub('\n', '')
 
 
 
-function Background:new(tiles)
-
-	self.images = {}
+function Background:new()
+	self.tiles = {}
 	for k, v in pairs(palette) do
-		self.images[k] = love.graphics.newImage('assets/' .. v .. '.png')
-		self.images[k]:setFilter('linear', 'nearest')
+		self.tiles[k] = Animation:new(v .. '.png')
 	end
 
-	return self
-end
-
-
-local sixteen = love.graphics.newQuad(0, 0, 16, 16, 16, 16)
-function Background:draw()
 	local row, col = 0, 0
 	map:gsub('..',
-		function(tile)
-			love.graphics.draw(self.images[tile], sixteen, col*16, row*16)
+		function(t)
+			local static = Static:new(col*16, row*16)
+			static.animation = self.tiles[t]
+			if solid[palette[t]] then
+				static.solid = true
+			end
+
 			col = (col + 1) % 10
 			if col == 0 then
 				row = row+1

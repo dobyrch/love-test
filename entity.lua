@@ -6,7 +6,6 @@ local Animation = require 'animation'
 
 
 local Entity = subclass(Object, {
-	instances = {},
 	dirs = {
 		'down', 'up', 'right', 'left',
 		down = {0, 1},
@@ -29,7 +28,6 @@ local Entity = subclass(Object, {
 -- }
 function Entity:new()
 	local instance = self:super()
-	self.instances[instance] = true
 
 	instance.x = 0
 	instance.y = 0
@@ -57,6 +55,7 @@ end
 
 
 -- TODO: check if both entities are collidable
+-- TODO: incorporate "buffers" of both entities in calculation
 function Entity:intersects(other)
 	return not (
 		self.x > other.x + other.width - self.buffer or
@@ -66,17 +65,16 @@ function Entity:intersects(other)
 	)
 end
 
-
+---[[
 function Entity:collide(dt, other)
 	if self.harm and other.harmable then
 		self:harm(dt, other)
 	end
 end
+--]]
 
 
 function Entity:recoil(dt, other)
-	-- TODO: Create Shader obj with its own timer;
-	-- shader persists across setAction()
 	if not dt then
 		self.effect = Effect:new('damaged', 0.800)
 	end
@@ -84,7 +82,7 @@ function Entity:recoil(dt, other)
 	if self.time < 0.300 then
 		self:callAction('bump', dt, other)
 	elseif self.time < 0.800 then
-		self:setAction('walk', dt)
+		self:setAction('walk')
 	end
 end
 
@@ -124,6 +122,7 @@ function Entity:setAction(action, ...)
 		self.time = 0
 
 		for k, v in pairs(self.tmp) do
+			-- TODO: Should this function be moved into Kinetic?
 			self.instances[v] = nil
 			self.tmp[k] = nil
 		end
