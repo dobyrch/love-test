@@ -1,5 +1,6 @@
 local Animation = require 'animation'
 local Static = require 'static'
+local Scheduler = require 'scheduler'
 
 
 local Background = {}
@@ -38,7 +39,6 @@ local solid = {
 	roof = true,
 }
 
-
 local map = [[
 ^m| ==============  
 -- |!!!!!!!!!!!!!!| 
@@ -65,9 +65,15 @@ function Background:new()
 	map:gsub('..',
 		function(t)
 			local static = Static:new(col*16, row*16)
-			static.animation = self.tiles[t]
-			if solid[palette[t]] then
-				static.solid = true
+			static.animation = Animation:new(palette[t] .. '.png')
+			static.solid = solid[palette[t]]
+
+			if t == '**' then
+				static.scheduler = Scheduler:new(
+					{0.4},
+					{function() static.animation:nextFrame() end},
+					true
+				)
 			end
 
 			col = (col + 1) % 10

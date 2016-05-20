@@ -4,6 +4,7 @@ local Object = require 'object'
 local Scheduler = subclass(Object)
 
 
+-- TODO: Accept (num, func, bool) in addtion to (table, table, bool)
 function Scheduler:new(timings, events, loop)
 	local instance = self:super()
 	

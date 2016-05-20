@@ -46,8 +46,16 @@ end
 
 
 function love.update(dt)
+	for e in pairs(Kinetic.instances) do
+		e:update(dt)
+	end
+	for xy, tab in pairs(Static.instances) do
+		for _, e in ipairs(tab) do
+			e:update(dt)
+		end
+	end
+
 	for e1 in pairs(Kinetic.instances) do
-		e1:update(dt)
 		for e2 in pairs(Kinetic.instances) do
 			if e1 ~= e2 and e1:intersects(e2) then
 				e1:collide(dt, e2)
