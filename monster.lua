@@ -4,30 +4,18 @@ local Kinetic = require 'kinetic'
 local Scheduler = require 'scheduler'
 
 
-local Monster = subclass(Kinetic, {alignment='bad'})
+local Monster = subclass(Kinetic)
 
 
 function Monster:new()
 	local instance
-	instance = self:super()
+	instance = self:inherit()
 	instance.animation = Animation:new('octorok.png')
 	instance.x = 112
 	instance.y = 112
 	instance.speed = 30
-	instance.damage = 1
-	instance.buffer = 5
-	instance.harmable = true
-	instance.health = 3
 	instance:setAction('walk')
 	return instance
-end
-
-
-function Monster:harm(dt, other)
-	if other.action ~= 'recoil' then
-		other:setAction('recoil', self)
-		other.health = other.health - self.damage
-	end
 end
 
 

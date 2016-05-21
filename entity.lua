@@ -4,7 +4,6 @@ local Object = require 'object'
 local Animation = require 'animation'
 
 
-
 local Entity = subclass(Object, {
 	dirs = {
 		'down', 'up', 'right', 'left',
@@ -13,28 +12,15 @@ local Entity = subclass(Object, {
 		right = {1, 0},
 		left = {-1, 0}
 	},
-	alignment = 'neutral',
 })
 
 
--- TODO: Pass arguments as table?
--- Entity:new{
--- 	image='file.png',
--- 	quads=8,
--- 	x=70,
--- 	y=70,
--- 	width=16,
--- 	height=16
--- }
 function Entity:new()
-	local instance = self:super()
+	local instance = self:inherit()
 
-	instance.x = 0
-	instance.y = 0
 	instance.width = 16
 	instance.height = 16
 	instance.dir = 'down'
-	instance.buffer = 0
 	instance.time = 0
 	instance.tmp = {}
 
@@ -54,24 +40,61 @@ function Entity:center()
 end
 
 
--- TODO: check if both entities are collidable
--- TODO: incorporate "buffers" of both entities in calculation
+-- TODO: Use individual buffer for each side
 function Entity:intersects(other)
+	local xbuf = (self.xbuf or 0) + (other.xbuf or 0)
+	local ybuf = (self.ybuf or 0) + (other.ybuf or 0)
+
 	return not (
-		self.x > other.x + other.width - self.buffer or
-		other.x > self.x + self.width - self.buffer or
-		self.y > other.y + other.height - self.buffer or
-		other.y > self.y + self.height - self.buffer
+		self.x > other.x + other.width - xbuf or
+		other.x > self.x + self.width  - xbuf or
+		self.y > other.y + other.height - ybuf or
+		other.y > self.y + self.height - ybuf
 	)
 end
 
----[[
-function Entity:collide(dt, other)
-	if self.harm and other.harmable then
-		self:harm(dt, other)
+
+function Entity:normal(other)
+	local xbuf = (self.xbuf or 0) + (other.xbuf or 0)
+	local ybuf = (self.ybuf or 0) + (other.ybuf or 0)
+
+	local dx = math.abs(self.x - other.x) + xbuf
+	local dy = math.abs(self.y - other.y) + ybuf
+
+	if dx > dy then
+		if self.x > other.x then
+			return 1, 0
+		else
+			return -1, 0
+		end
+	elseif dy > dx then
+		if self.y > other.y then
+			return 0, 1
+		else
+			return 0, -1
+		end
+	else
+		return (self.x > other.x) and 1 or -1,
+			(self.y > other.y) and 1 or -1
 	end
 end
---]]
+
+
+-- TODO: Perhaps this sould be moved into main.lua or reactions.lua
+--       Might also be more appropriate to call it 'react' or 'resolve'
+function Entity:collide(other)
+	local react
+	local class = other:super()
+
+	while not react and class do
+		react = self[class]
+		class = class:super()
+	end
+
+	if react then
+		react(self, other)
+	end
+end
 
 
 function Entity:recoil(dt, other)
@@ -127,7 +150,7 @@ function Entity:setAction(action, ...)
 			self.tmp[k] = nil
 		end
 
-		-- First call to action func with time == 0 gives action
+		-- First call to action func with dt == nil gives action
 		-- a chance to set up (create animations, subentities, etc)
 		action_func(self, nil, ...)
 
@@ -141,6 +164,8 @@ function Entity:setAction(action, ...)
 end
 
 
+-- TODO: Add mask so some actions can't be interrupted by others
+-- TODO: Check that action is valid (see setAction)
 function Entity:callAction(action, dt, ...)
 	local saved_action = self.action
 	local saved_func = self.action_func
@@ -148,10 +173,6 @@ function Entity:callAction(action, dt, ...)
 	local saved_tmp = self.tmp
 
 	self[action](self, dt, ...)
-	--self:setAction(action, ...)
-	--self:action_func(dt)
-
-	--self:setAction(saved_action)
 	self.action_func = saved_func
 	self.time = saved_time
 	self.tmp = saved_tmp

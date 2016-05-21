@@ -6,7 +6,7 @@ local Scheduler = subclass(Object)
 
 -- TODO: Accept (num, func, bool) in addtion to (table, table, bool)
 function Scheduler:new(timings, events, loop)
-	local instance = self:super()
+	local instance = self:inherit()
 	
 	if #timings ~= #events then
 		error('Length of arguments do not match', 2)

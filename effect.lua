@@ -6,7 +6,7 @@ local shaders = {}
 
 
 function Effect:new(shader, duration)
-	local instance = self:super()
+	local instance = self:inherit()
 	instance.duration = duration
 	instance.time = 0
 

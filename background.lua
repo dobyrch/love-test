@@ -1,5 +1,6 @@
 local Animation = require 'animation'
 local Static = require 'static'
+local Solid = require 'solid'
 local Scheduler = require 'scheduler'
 
 
@@ -49,6 +50,7 @@ local map = [[
 ___|!!!!!!::!!!!!!| 
 ::::::::::::|-----  
 ----========__**__  
+   |,,,,,,,,,,,,,,| 
 ]]
 
 map = map:gsub('\n', '')
@@ -64,9 +66,8 @@ function Background:new()
 	local row, col = 0, 0
 	map:gsub('..',
 		function(t)
-			local static = Static:new(col*16, row*16)
+			local static = (solid[palette[t]] and Solid or Static):new(col*16, row*16)
 			static.animation = Animation:new(palette[t] .. '.png')
-			static.solid = solid[palette[t]]
 
 			if t == '**' then
 				static.scheduler = Scheduler:new(

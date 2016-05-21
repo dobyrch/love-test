@@ -9,7 +9,7 @@ local DIM = 16
 
 
 function Animation:new(filename)
-	local instance = self:super()
+	local instance = self:inherit()
 	instance.down = {}
 	instance.up = {}
 	instance.right = {}
