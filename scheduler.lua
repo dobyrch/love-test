@@ -14,7 +14,7 @@ function Scheduler:new(timings, events, loop)
 
 	instance.timings = timings
 	instance.events = events
-	self.loop = loop
+	instance.loop = loop
 	instance.time = 0
 	instance.i = 1
 
