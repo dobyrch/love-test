@@ -30,6 +30,7 @@ function Player:swing(dt)
 
 		self.animation = Animation:new('swing.png')
 
+		local dx, dy = player:dirVector()
 		local xtab, ytab
 		xtab = {down = -1, up = 1, right = 0, left = 0}
 		ytab = {down = 0, up = 0, right = -1, left = -1}
@@ -49,9 +50,24 @@ function Player:swing(dt)
 			ytab = {down = 0, up = 0, right = 1, left = 1}
 			sword.x = sword.x + xtab[sword.dir]*self.width
 			sword.y = sword.y + ytab[sword.dir]*self.width
+
+			if sword.dir == 'left' or sword.dir == 'right' then
+				sword.y = sword.y + 4
+			elseif sword.dir == 'up' then
+				sword.x = sword.x - 4
+			elseif sword.dir == 'down' then
+				sword.x = sword.x + 4
+			end
+
+			player.x = player.x + dx*4
+			player.y = player.y + dy*4
+
 			sword.animation:nextFrame()
 		end
 		function three()
+			player.x = player.x - dx*4
+			player.y = player.y - dy*4
+
 			self:setAction('walk')
 		end
 
