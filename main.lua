@@ -1,8 +1,10 @@
-local Kinetic = require 'kinetic'
-local Static = require 'static'
 local Background = require 'background'
+local Entity = require 'entity'
+local Kinetic = require 'kinetic'
 local Monster = require 'monster'
 local Player = require 'player'
+local Scroller = require 'scroller'
+local Static = require 'static'
 require 'reactions'
 
 
@@ -46,6 +48,18 @@ end
 
 
 function love.update(dt)
+	-- Scroll the screen if the player moves out of bounds
+	if scroller and not scroller.done then
+		scroller:update(dt)
+		return
+	end
+
+	local outdir = player:outOfBounds()
+	if outdir then
+		scroller = Scroller:new(outdir)
+	end
+
+	-- Update position and animation of each entity
 	for e in pairs(Kinetic.instances) do
 		e:update(dt)
 	end
@@ -54,6 +68,7 @@ function love.update(dt)
 		e:update(dt)
 	end
 
+	-- Resolve collisions between entities
 	for e1 in pairs(Kinetic.instances) do
 		for e2 in pairs(Kinetic.instances) do
 			if e1:intersects(e2) then

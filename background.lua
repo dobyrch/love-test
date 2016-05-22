@@ -26,8 +26,12 @@ local palette = {
 	['^m'] = 'tree_botright',
 	['::'] = 'path',
 	['()'] = 'window',
-	['[]'] = 'door',
+	['@d'] = 'door',
+	['@t'] = 'treedoor',
 	['~~'] = 'roof',
+	['##'] = 'graytile',
+	['xx'] = 'redtile',
+	['??'] = 'phone',
 }
 
 local solid = {
@@ -38,6 +42,7 @@ local solid = {
 	tree_botright = true,
 	window = true,
 	roof = true,
+	phone = true,
 }
 
 local map = [[
@@ -45,16 +50,22 @@ local map = [[
 -- |!!!!!!!!!!!!!!| 
    |!!,,,,,,,,<^^>,,
   **!!,,~~~~~~m^^m,,
-   |!!,,()[](),,!!| 
+   |!!,,()@d(),,!!| 
    |!!,,,,::,,,,!!| 
 ___|!!!!!!::!!!!!!| 
 ::::::::::::|-----  
 ----========__**__  
-   |,,,,,,,,,,,,,,| 
+   |##############| 
+** |##xxxxxxxxxx##| 
+   |##xx<^??^>xx##| 
+   |##xxm^@t^mxx##| 
+   |##xxxxxxxxxx##| 
+  **##############|_
+^><^^><^^><^^><^^><^
+^mm^^mm^^mm^^mm^^mm^
 ]]
 
 map = map:gsub('\n', '')
-
 
 
 function Background:new()

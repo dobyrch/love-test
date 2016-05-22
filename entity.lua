@@ -28,10 +28,16 @@ function Entity:new()
 end
 
 
-function Entity:inBounds()
-	return self.x > 0 and self.y > 0 and
-		self.x < 160 - self.width and
-		self.y < 144 - self.height
+function Entity:outOfBounds()
+	if self.x < 0 then
+		return 'left'
+	elseif self.x > 160 - self.width then
+		return 'right'
+	elseif self.y < 0 then
+		return 'up'
+	elseif self.y > 144 - self.height then
+		return 'down'
+	end
 end
 
 
@@ -47,7 +53,7 @@ function Entity:intersects(other)
 
 	return not (
 		self.x > other.x + other.width - xbuf or
-		other.x > self.x + self.width  - xbuf or
+		other.x > self.x + self.width - xbuf or
 		self.y > other.y + other.height - ybuf or
 		other.y > self.y + self.height - ybuf
 	)
@@ -196,12 +202,12 @@ function Entity:bump(dt, other)
 	local oldx, oldy = self.x, self.y
 
 	self.x = self.x + dt*xmag*80
-	if not self:inBounds() then
+	if self:outOfBounds() then
 		self.x = oldx
 	end
 
 	self.y = self.y + dt*ymag*80
-	if not self:inBounds() then
+	if self:outOfBounds() then
 		self.y = oldy
 	end
 end
@@ -218,8 +224,9 @@ function Entity:setDir(dir)
 end
 
 
-function Entity:dirVector()
-	return unpack(self.dirs[self.dir])
+function Entity:dirVector(dir)
+	local d = dir or self.dir
+	return unpack(self.dirs[d])
 end
 
 

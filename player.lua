@@ -81,7 +81,7 @@ end
 
 function Player:walk(dt)
 	local dx, dy = 0, 0
-	local up =  love.keyboard.isDown('up','e')
+	local up = love.keyboard.isDown('up','e')
 	local down = love.keyboard.isDown('down', 'd')
 	local right = love.keyboard.isDown('right','f')
 	local left = love.keyboard.isDown('left','s')
@@ -133,14 +133,7 @@ function Player:walk(dt)
 	end
 
 	self.x = self.x + dx
-	if not self:inBounds() then
-		self.x = self.x - dx
-	end
-
 	self.y = self.y + dy
-	if not self:inBounds() then
-		self.y = self.y - dy
-	end
 end
 Player.stand = Player.walk
 

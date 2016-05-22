@@ -38,13 +38,13 @@ function Monster:walk(dt)
 
 	local xdir, ydir = self:dirVector()
 
-	if self:inBounds() then
+	if not self:outOfBounds() then
 		self.x = self.x + self.speed*dt*xdir
 		self.y = self.y + self.speed*dt*ydir
 
 	end
 
-	if not self:inBounds() then
+	if self:outOfBounds() then
 		self.x = self.x - self.speed*dt*xdir
 		self.y = self.y - self.speed*dt*ydir
 	end
