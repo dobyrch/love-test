@@ -49,10 +49,9 @@ function love.update(dt)
 	for e in pairs(Kinetic.instances) do
 		e:update(dt)
 	end
-	for xy, tab in pairs(Static.instances) do
-		for _, e in ipairs(tab) do
-			e:update(dt)
-		end
+
+	for e in Static:iterAll() do
+		e:update(dt)
 	end
 
 	for e1 in pairs(Kinetic.instances) do
@@ -62,7 +61,7 @@ function love.update(dt)
 			end
 		end
 
-		for _, e2 in ipairs(Static:nearby(e1)) do
+		for e2 in Static:iterNear(e1) do
 			if e1:intersects(e2) then
 				e1:collide(e2)
 			end
@@ -75,11 +74,8 @@ function love.draw()
 	-- TODO: Scale appropriately based on resolution
 	love.graphics.scale(4, 4)
 
-	-- TODO: Add generator for iterating over statics
-	for xy, tab in pairs(Static.instances) do
-		for _, e in ipairs(tab) do
-			e:draw()
-		end
+	for e in Static:iterAll() do
+		e:draw()
 	end
 
 	for e in pairs(Kinetic.instances) do

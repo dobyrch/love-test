@@ -27,26 +27,57 @@ function Static:new(x, y)
 end
 
 
-function Static:nearby(other)
-	local i, j
-	i = math.floor(other.x / TILE_WIDTH)
-	j = math.floor(other.y / TILE_WIDTH)
+function Static:iter(table, coords, i)
+	while true do
+		if not coords then
+			return nil
+		end
 
-	local results = {}
+		local e = self.instances[coords][i]
+		if e then
+			return e, coords, i+1
+		end
+
+		coords = next(table, coords)
+		i = 1
+	end
+end
+
+
+function Static:iterAll()
+	local coords = next(self.instances)
+	local i = 1
+
+	return function()
+		e, coords, i = self:iter(self.instances, coords, i)
+		return e
+	end
+end
+
+
+function Static:iterNear(other)
+	local i = math.floor(other.x / TILE_WIDTH)
+	local j = math.floor(other.y / TILE_WIDTH)
+	local nearby = {}
+	local coords
+
 	for i = i, i+1 do
 		for j = j, j+1 do
-			local coords = i .. ',' .. j
-			local statics = self.instances[coords]
+			coords = i .. ',' .. j
 
-			if statics then
-				for _, v in ipairs(statics) do
-					table.insert(results, v)
-				end
+			if self.instances[coords] then
+				nearby[coords] = true
 			end
 		end
 	end
 
-	return results
+	local coords = next(nearby)
+	local k = 1
+
+	return function()
+		e, coords, k = self:iter(nearby, coords, k)
+		return e
+	end
 end
 
 
