@@ -1,13 +1,4 @@
-local Animation = require 'animation'
-local Static = require 'static'
-local Solid = require 'solid'
-local Scheduler = require 'scheduler'
-local subclass = require 'subclass'
-local Object = require 'object'
-local Tile = require 'tile'
-local Entity = require 'entity'
-
-local Background = subclass(Object, {speed=200})
+Background = subclass(Object, {speed=200})
 
 local palette = {
 	['**'] = 'flower',
@@ -79,7 +70,7 @@ function Background:new(map, x, y)
 				)
 			end
 
-			col = col % 10 + 1
+			col = col % GW + 1
 			if col == 1 then
 				row = row + 1
 				instance.tiles[row] = {}
@@ -93,8 +84,7 @@ end
 
 
 function Background:scroll(dir)
-	-- TODO: Move dirVector into util
-	self.dx, self.dy = Entity:dirVector(dir)
+	self.dx, self.dy = util.dirVector(dir)
 	self.nextmap = Background:new(self.map, self.x + self.dx, self.y + self.dy)
 	self.scrolling = true
 end
@@ -106,7 +96,7 @@ function Background:update(dt)
 	if self.scrolling then
 		self.distance = self.distance + dt*self.speed
 
-		if self.distance >= math.abs(self.dx*160 + self.dy*128) then
+		if self.distance >= math.abs(self.dx*WW + self.dy*WH) then
 			for k, v in pairs(self.nextmap) do
 				self[k] = v
 			end
@@ -116,26 +106,23 @@ end
 
 
 function Background:draw()
-	for i = 1, 8 do
-		for j = 1, 10 do
+	for i = 1, GH do
+		for j = 1, GW do
 			local tile = self.tiles[i][j]
 			local image, quad = tile.animation:getFrame()
 			love.graphics.draw(image, quad,
-				(j - 1)*16 - self.dx*self.distance,
-				(i - 1)*16 - self.dy*self.distance
+				(j - 1)*TS - self.dx*self.distance,
+				(i - 1)*TS - self.dy*self.distance
 			)
 
 			if self.nextmap then
 				tile = self.nextmap.tiles[i][j]
 				image, quad = tile.animation:getFrame()
 				love.graphics.draw(image, quad,
-					(j - 1)*16 + self.dx*160 - self.dx*self.distance,
-					(i - 1)*16 + self.dy*128 - self.dy*self.distance
+					(j - 1)*TS + self.dx*WW - self.dx*self.distance,
+					(i - 1)*TS + self.dy*WH - self.dy*self.distance
 				)
 			end
 		end
 	end
 end
-
-
-return Background

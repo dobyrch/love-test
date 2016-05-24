@@ -1,10 +1,4 @@
-local subclass = require 'subclass'
-local Entity = require 'entity'
-
--- TODO: Put screen/tile dimensions and other constants in their own module
-local TILE_WIDTH = 16
-
-local Kinetic = subclass(Entity, {instances={}})
+Kinetic = subclass(Entity, {instances={}})
 
 
 function Kinetic:new()
@@ -12,6 +6,3 @@ function Kinetic:new()
 	self.instances[instance] = true
 	return instance
 end
-
-
-return Kinetic

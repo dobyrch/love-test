@@ -1,10 +1,4 @@
-local subclass = require 'subclass'
-local Animation = require 'animation'
-local Kinetic = require 'kinetic'
-local Scheduler = require 'scheduler'
-
-
-local Monster = subclass(Kinetic)
+Monster = subclass(Kinetic)
 
 
 function Monster:new()
@@ -58,10 +52,7 @@ function Monster:stand(dt)
 	end
 
 	if self.time > 0.5 then
-		self:setDir()
+		self:changeDir()
 		self:setAction('walk')
 	end
 end
-
-
-return Monster

@@ -1,25 +1,11 @@
-local Effect = require 'effect'
-local subclass = require 'subclass'
-local Object = require 'object'
-local Animation = require 'animation'
-
-
-local Entity = subclass(Object, {
-	dirs = {
-		'down', 'up', 'right', 'left',
-		down = {0, 1},
-		up = {0, -1},
-		right = {1, 0},
-		left = {-1, 0}
-	},
-})
+Entity = subclass(Object)
 
 
 function Entity:new()
 	local instance = self:inherit()
 
-	instance.width = 16
-	instance.height = 16
+	instance.width = TS
+	instance.height = TS
 	instance.dir = 'down'
 	instance.time = 0
 	instance.tmp = {}
@@ -31,11 +17,11 @@ end
 function Entity:outOfBounds()
 	if self.x < 0 then
 		return 'left'
-	elseif self.x > 160 - self.width then
+	elseif self.x > WW - TS then
 		return 'right'
 	elseif self.y < 0 then
 		return 'up'
-	elseif self.y > 144 - self.height then
+	elseif self.y > WH - TS then
 		return 'down'
 	end
 end
@@ -213,21 +199,11 @@ function Entity:bump(dt, other)
 end
 
 
-function Entity:setDir(dir)
-	if not dir then
-		self.dir = self.dirs[math.random(#self.dirs)]
-	elseif self.dirs[dir] then
-		self.dir = dir
-	else
-		error('Unknown dir "' .. dir '"', 2)
-	end
+function Entity:changeDir()
+	self.dir = util.dirs[math.random(#util.dirs)]
 end
 
 
-function Entity:dirVector(dir)
-	local d = dir or self.dir
-	return unpack(self.dirs[d])
+function Entity:dirVector()
+	return util.dirVector(self.dir)
 end
-
-
-return Entity

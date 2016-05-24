@@ -1,7 +1,4 @@
-local subclass = require 'subclass'
-local Object = require 'object'
-
-local Scheduler = subclass(Object)
+Scheduler = subclass(Object)
 
 
 -- TODO: Accept (num, func, bool) in addtion to (table, table, bool)
@@ -36,5 +33,3 @@ function Scheduler:update(dt)
 		end
 	end
 end
-
-return Scheduler

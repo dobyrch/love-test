@@ -1,10 +1,4 @@
-local Background = require 'background'
-local Entity = require 'entity'
-local Kinetic = require 'kinetic'
-local Monster = require 'monster'
-local Player = require 'player'
-local Static = require 'static'
-require 'reactions'
+require 'all'
 
 
 function love.load(arg)

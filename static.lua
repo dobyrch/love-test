@@ -1,9 +1,4 @@
-local subclass = require 'subclass'
-local Entity = require 'entity'
-
-local TILE_WIDTH = 16
-
-local Static = subclass(Entity, {instances={}})
+Static = subclass(Entity, {instances={}})
 
 
 function Static:new(x, y)
@@ -12,8 +7,8 @@ function Static:new(x, y)
 	instance.y = y
 
 	local i, j
-	i = math.floor(x / TILE_WIDTH)
-	j = math.floor(y / TILE_WIDTH)
+	i = math.floor(x / TS)
+	j = math.floor(y / TS)
 
 
 	local coords = i .. ',' .. j
@@ -56,8 +51,8 @@ end
 
 
 function Static:iterNear(other)
-	local i = math.floor(other.x / TILE_WIDTH)
-	local j = math.floor(other.y / TILE_WIDTH)
+	local i = math.floor(other.x / TS)
+	local j = math.floor(other.y / TS)
 	local nearby = {}
 	local coords
 
@@ -79,6 +74,3 @@ function Static:iterNear(other)
 		return e
 	end
 end
-
-
-return Static

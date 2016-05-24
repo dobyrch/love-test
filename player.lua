@@ -1,10 +1,4 @@
-local subclass = require 'subclass'
-local Animation = require 'animation'
-local Kinetic = require 'kinetic'
-local Sword = require 'sword'
-local Scheduler = require 'scheduler'
-
-local Player = subclass(Kinetic)
+Player = subclass(Kinetic)
 
 
 function Player:new()
@@ -26,7 +20,7 @@ function Player:swing(dt)
 		sword = self.tmp.sword
 		sword.x = self.x
 		sword.y = self.y
-		sword:setDir(self.dir)
+		sword.dir = self.dir
 
 		self.animation = Animation:new('swing.png')
 
@@ -88,18 +82,18 @@ function Player:walk(dt)
 
 	if up and not down then
 		dy = -self.speed
-		self:setDir('up')
+		self.dir = 'up'
 	elseif down and not up then
 		dy = self.speed
-		self:setDir('down')
+		self.dir = 'down'
 	end
 
 	if right and not left then
 		dx = self.speed
-		self:setDir('right')
+		self.dir = 'right'
 	elseif left and not right then
 		dx = -self.speed
-		self:setDir('left')
+		self.dir = 'left'
 	end
 
 	if not dt then
@@ -136,6 +130,3 @@ function Player:walk(dt)
 	self.y = self.y + dy
 end
 Player.stand = Player.walk
-
-
-return Player

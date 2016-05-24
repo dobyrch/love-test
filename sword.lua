@@ -1,9 +1,4 @@
-local subclass = require 'subclass'
-local Animation = require 'animation'
-local Kinetic = require 'kinetic'
-
-
-local Sword = subclass(Kinetic)
+Sword = subclass(Kinetic)
 
 
 function Sword:new()
@@ -11,6 +6,3 @@ function Sword:new()
 	instance.animation = Animation:new('sword.png')
 	return instance
 end
-
-
-return Sword

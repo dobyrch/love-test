@@ -1,6 +1,4 @@
-local subclass = require 'subclass'
-
-local Object = subclass(nil)
+Object = subclass(nil)
 
 
 function Object:super()
@@ -32,6 +30,3 @@ end
 function Object:new(...)
 	return self:inherit(...)
 end
-
-
-return Object

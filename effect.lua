@@ -1,7 +1,4 @@
-local subclass = require 'subclass'
-local Object = require 'object'
-
-local Effect = subclass(Object)
+Effect = subclass(Object)
 local shaders = {}
 
 
@@ -65,6 +62,3 @@ shaders.damaged = love.graphics.newShader [[
 		return pixel;
 	}
 ]]
-
-
-return Effect

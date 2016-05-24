@@ -1,10 +1,3 @@
-Kinetic = require 'kinetic'
-Monster = require 'monster'
-Player = require 'player'
-Solid = require 'solid'
-Sword = require 'sword'
-
-
 Player[Monster] = function(player, monster)
 	player:setAction('recoil', monster)
 end
@@ -21,8 +14,8 @@ Kinetic[Solid] = function(player, solid)
 	while player:intersects(solid) do
 		dx, dy = player:normal(solid)
 
-		player.x = player.x + dx*0.01
-		player.y = player.y + dy*0.01
+		player.x = player.x + dx*IOTA
+		player.y = player.y + dy*IOTA
 	end
 end
 
