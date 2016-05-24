@@ -103,13 +103,10 @@ end
 
 
 function Entity:draw()
-	if self.animation then
-		love.graphics.setShader(self.effect and self.effect.shader)
-		local image, quad = self.animation:getFrame(self.dir)
-		love.graphics.draw(image, quad, self.x, self.y)
-		love.graphics.setShader(nil)
-	end
-
+	love.graphics.setShader(self.effect and self.effect.shader)
+	local image, quad = self.animation:getFrame(self.dir)
+	love.graphics.draw(image, quad, self.x, self.y)
+	love.graphics.setShader(nil)
 end
 
 

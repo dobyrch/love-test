@@ -49,8 +49,8 @@ function love.update(dt)
 			e.y = e.y - background.dy*background.speed*dt
 
 			if e == player then
-				e.x = e.x + background.dx*20*dt
-				e.y = e.y + background.dy*20*dt
+				e.x = e.x + background.dx*22*dt
+				e.y = e.y + background.dy*22*dt
 			end
 		end
 

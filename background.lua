@@ -86,6 +86,7 @@ end
 function Background:scroll(dir)
 	self.dx, self.dy = util.dirVector(dir)
 	self.nextmap = Background:new(self.map, self.x + self.dx, self.y + self.dy)
+	self.canvas = love.graphics.newCanvas(SW, SH)
 	self.scrolling = true
 end
 
@@ -115,14 +116,19 @@ function Background:draw()
 				(i - 1)*TS - self.dy*self.distance
 			)
 
-			if self.nextmap then
-				tile = self.nextmap.tiles[i][j]
-				image, quad = tile.animation:getFrame()
-				love.graphics.draw(image, quad,
-					(j - 1)*TS + self.dx*WW - self.dx*self.distance,
-					(i - 1)*TS + self.dy*WH - self.dy*self.distance
-				)
-			end
 		end
+	end
+
+	if self.nextmap then
+		love.graphics.setCanvas(self.canvas)
+		self.nextmap:draw()
+		love.graphics.setCanvas()
+
+		love.graphics.draw(self.canvas,
+			(WW - self.distance)*self.dx,
+			(WH - self.distance)*self.dy,
+			0, 1/SCALE, 1/SCALE
+		)
+
 	end
 end
