@@ -2,9 +2,12 @@ local Animation = require 'animation'
 local Static = require 'static'
 local Solid = require 'solid'
 local Scheduler = require 'scheduler'
+local subclass = require 'subclass'
+local Object = require 'object'
+local Tile = require 'tile'
+local Entity = require 'entity'
 
-
-local Background = {}
+local Background = subclass(Object, {speed=200})
 
 local palette = {
 	['**'] = 'flower',
@@ -34,66 +37,104 @@ local palette = {
 	['??'] = 'phone',
 }
 
-local solid = {
-	fence = true,
-	tree_topleft = true,
-	tree_topright = true,
-	tree_botleft = true,
-	tree_botright = true,
-	window = true,
-	roof = true,
-	phone = true,
+local types = {
+	fence = Solid,
+	phone = Solid,
+	roof = Solid,
+	tree_botleft = Solid,
+	tree_botright = Solid,
+	tree_topleft = Solid,
+	tree_topright = Solid,
+	window = Solid,
 }
 
-local map = [[
-^m| ==============  
--- |!!!!!!!!!!!!!!| 
-   |!!,,,,,,,,<^^>,,
-  **!!,,~~~~~~m^^m,,
-   |!!,,()@d(),,!!| 
-   |!!,,,,::,,,,!!| 
-___|!!!!!!::!!!!!!| 
-::::::::::::|-----  
-----========__**__  
-   |##############| 
-** |##xxxxxxxxxx##| 
-   |##xx<^??^>xx##| 
-   |##xxm^@t^mxx##| 
-   |##xxxxxxxxxx##| 
-  **##############|_
-^><^^><^^><^^><^^><^
-^mm^^mm^^mm^^mm^^mm^
-]]
 
-map = map:gsub('\n', '')
+function Background:new(map, x, y)
+	instance = self:inherit()
+	instance.tiles = {}
+	instance.map = map
+	instance.x = x or 1
+	instance.y = y or 1
+	instance.dx = 0
+	instance.dy = 0
+	instance.distance = 0
+	instance.scrolling = false
 
-
-function Background:new()
-	self.tiles = {}
-	for k, v in pairs(palette) do
-		self.tiles[k] = Animation:new(v .. '.png')
-	end
+	local textmap = require(string.format('maps/%s_%d-%d', map, x, y))
+	textmap = textmap:gsub('\n', '')
 
 	local row, col = 0, 0
-	map:gsub('..',
+	textmap:gsub('..',
 		function(t)
-			local static = (solid[palette[t]] and Solid or Static):new(col*16, row*16)
-			static.animation = Animation:new(palette[t] .. '.png')
+			local tilename = palette[t]
+			local tile = (types[tilename] or Tile):new()
+
+			tile.animation = Animation:new(tilename .. '.png')
 
 			if t == '**' then
-				static.scheduler = Scheduler:new(
+				tile.scheduler = Scheduler:new(
 					{0.4},
-					{function() static.animation:nextFrame() end},
+					{function() tile.animation:nextFrame() end},
 					true
 				)
 			end
 
-			col = (col + 1) % 10
-			if col == 0 then
-				row = row+1
+			col = col % 10 + 1
+			if col == 1 then
+				row = row + 1
+				instance.tiles[row] = {}
 			end
+
+			instance.tiles[row][col] = tile
 		end
 	)
+	return instance
+end
+
+
+function Background:scroll(dir)
+	-- TODO: Move dirVector into util
+	self.dx, self.dy = Entity:dirVector(dir)
+	self.nextmap = Background:new(self.map, self.x + self.dx, self.y + self.dy)
+	self.scrolling = true
+end
+
+
+function Background:update(dt)
+	-- TODO: Store only one instance of each tile; update each once
+
+	if self.scrolling then
+		self.distance = self.distance + dt*self.speed
+
+		if self.distance >= math.abs(self.dx*160 + self.dy*128) then
+			for k, v in pairs(self.nextmap) do
+				self[k] = v
+			end
+		end
+	end
+end
+
+
+function Background:draw()
+	for i = 1, 8 do
+		for j = 1, 10 do
+			local tile = self.tiles[i][j]
+			local image, quad = tile.animation:getFrame()
+			love.graphics.draw(image, quad,
+				(j - 1)*16 - self.dx*self.distance,
+				(i - 1)*16 - self.dy*self.distance
+			)
+
+			if self.nextmap then
+				tile = self.nextmap.tiles[i][j]
+				image, quad = tile.animation:getFrame()
+				love.graphics.draw(image, quad,
+					(j - 1)*16 + self.dx*160 - self.dx*self.distance,
+					(i - 1)*16 + self.dy*128 - self.dy*self.distance
+				)
+			end
+		end
+	end
 end
 
 

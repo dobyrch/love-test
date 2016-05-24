@@ -49,7 +49,7 @@ end
 
 
 function Animation:getFrame(dir)
-	return self.image, self[dir][self.frame]
+	return self.image, self[dir or 'down'][self.frame]
 end
 
 

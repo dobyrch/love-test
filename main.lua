@@ -3,13 +3,12 @@ local Entity = require 'entity'
 local Kinetic = require 'kinetic'
 local Monster = require 'monster'
 local Player = require 'player'
-local Scroller = require 'scroller'
 local Static = require 'static'
 require 'reactions'
 
 
 function love.load(arg)
-	background = Background:new()
+	background = Background:new('overworld', 1, 1)
 	player = Player:new()
 	monster = Monster:new()
 end
@@ -48,15 +47,25 @@ end
 
 
 function love.update(dt)
-	-- Scroll the screen if the player moves out of bounds
-	if scroller and not scroller.done then
-		scroller:update(dt)
+	background:update(dt)
+
+	if background.scrolling then
+		for e in pairs(Kinetic.instances) do
+			e.x = e.x - background.dx*background.speed*dt
+			e.y = e.y - background.dy*background.speed*dt
+
+			if e == player then
+				e.x = e.x + background.dx*20*dt
+				e.y = e.y + background.dy*20*dt
+			end
+		end
+
 		return
 	end
 
 	local outdir = player:outOfBounds()
 	if outdir then
-		scroller = Scroller:new(outdir)
+		background:scroll(outdir)
 	end
 
 	-- Update position and animation of each entity
@@ -88,6 +97,8 @@ end
 function love.draw()
 	-- TODO: Scale appropriately based on resolution
 	love.graphics.scale(4, 4)
+
+	background:draw()
 
 	for e in Static:iterAll() do
 		e:draw()
