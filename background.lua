@@ -41,16 +41,16 @@ local types = {
 }
 
 
-function Background:new(map, x, y)
-	instance = self:inherit()
-	instance.tiles = {}
-	instance.map = map
-	instance.x = x or 1
-	instance.y = y or 1
-	instance.dx = 0
-	instance.dy = 0
-	instance.distance = 0
-	instance.scrolling = false
+function Background:init(map, x, y)
+	self:inherit()
+	self.tiles = {}
+	self.map = map
+	self.x = x or 1
+	self.y = y or 1
+	self.dx = 0
+	self.dy = 0
+	self.distance = 0
+	self.scrolling = false
 
 	local textmap, initmap = unpack(require(string.format(
 		'maps/%s_%d-%d', map, x, y
@@ -71,15 +71,14 @@ function Background:new(map, x, y)
 			col = col % GW + 1
 			if col == 1 then
 				row = row + 1
-				instance.tiles[row] = {}
+				self.tiles[row] = {}
 			end
 
 			tile.x = (col - 1)*TS
 			tile.y = (row - 1)*TS
-			instance.tiles[row][col] = tile
+			self.tiles[row][col] = tile
 		end
 	)
-	return instance
 end
 
 

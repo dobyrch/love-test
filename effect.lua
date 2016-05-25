@@ -2,18 +2,16 @@ Effect = subclass(Object)
 local shaders = {}
 
 
-function Effect:new(shader, duration)
-	local instance = self:inherit()
-	instance.duration = duration
-	instance.time = 0
+function Effect:init(shader, duration)
+	self:inherit()
+	self.duration = duration
+	self.time = 0
 
 	if shaders[shader] then
 		self.shader = shaders[shader]
 	else
 		error('Unknown shader "' .. shader .. '"', 2)
 	end
-
-	return instance
 end
 
 

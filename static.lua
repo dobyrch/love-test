@@ -1,24 +1,22 @@
 Static = subclass(Entity, {instances={}})
 
 
-function Static:new(i, j)
-	local instance = self:inherit()
+function Static:init(i, j)
+	self:inherit()
 
-	instance.i = i
-	instance.j = j
-	instance.x = (i - 1)*TS
-	instance.y = (j - 1)*TS
+	self.i = i
+	self.j = j
+	self.x = (i - 1)*TS
+	self.y = (j - 1)*TS
 
 	local coords = i .. ',' .. j
-	instance.coords = coords
+	self.coords = coords
 
 	if self.instances[coords] then
-		table.insert(self.instances[coords], instance)
+		table.insert(self.instances[coords], self)
 	else
-		self.instances[coords] = {instance}
+		self.instances[coords] = {self}
 	end
-
-	return instance
 end
 
 

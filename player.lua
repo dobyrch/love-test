@@ -1,16 +1,14 @@
 Player = subclass(Kinetic)
 
 
-function Player:new()
-	local instance
-	instance = self:inherit()
-	instance.x = 80
-	instance.y = 80
-	instance.speed = 60
-	instance:setAction('walk')
-	instance.xbuf = 3
-	instance.ybuf = 2
-	return instance
+function Player:init()
+	self:inherit()
+	self.x = 80
+	self.y = 80
+	self.speed = 60
+	self:setAction('walk')
+	self.xbuf = 3
+	self.ybuf = 2
 end
 
 

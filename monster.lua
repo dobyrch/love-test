@@ -1,15 +1,13 @@
 Monster = subclass(Kinetic)
 
 
-function Monster:new()
-	local instance
-	instance = self:inherit()
-	instance.animation = Animation:new('octorok.png')
-	instance.x = 16
-	instance.y = 48
-	instance.speed = 30
-	instance:setAction('walk')
-	return instance
+function Monster:init()
+	self:inherit()
+	self.animation = Animation:new('octorok.png')
+	self.x = 16
+	self.y = 48
+	self.speed = 30
+	self:setAction('walk')
 end
 
 

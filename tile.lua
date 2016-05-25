@@ -1,9 +1,6 @@
 Tile = subclass(Object)
 
-function Tile:new(name)
-	local instance = self:inherit()
-
-	instance.animation = Animation:new(name .. '.png')
-
-	return instance
+function Tile:init(name)
+	self:inherit()
+	self.animation = Animation:new(name .. '.png')
 end

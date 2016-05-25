@@ -1,8 +1,7 @@
 Kinetic = subclass(Entity, {instances={}})
 
 
-function Kinetic:new()
-	local instance = self:inherit()
-	self.instances[instance] = true
-	return instance
+function Kinetic:init()
+	self:inherit()
+	self.instances[self] = true
 end

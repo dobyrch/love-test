@@ -1,14 +1,12 @@
 Flower = subclass(Tile)
 
 
-function Flower:new(name)
-	local instance = self:inherit(name)
+function Flower:init(name)
+	self:inherit(name)
 
-	instance.scheduler = Scheduler:new(
+	self.scheduler = Scheduler:new(
 		{0.4},
-		{function() instance.animation:nextFrame() end},
+		{function() self.animation:nextFrame() end},
 		true
 	)
-
-	return instance
 end

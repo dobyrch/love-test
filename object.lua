@@ -1,32 +1,39 @@
 Object = subclass(nil)
 
 
+function Object:init(...)
+end
+
+
 function Object:super()
 	return getmetatable(self).__index
 end
 
 
+local class
 function Object:inherit(...)
-	local instance
-	local class = self
+	if not class then
+		class = self:super()
+	end
 
-	while class and not rawget(class, 'new') do
+	while class and not rawget(class, 'init') do
 		class = class:super()
 	end
 
 	class = class and class:super()
 
 	if class then
-		instance = class:new(...)
-	else
-		instance = {}
+		class.init(self, ...)
+		class = nil
 	end
-
-	setmetatable(instance, {__index=self})
-	return instance
 end
 
 
 function Object:new(...)
-	return self:inherit(...)
+	local instance = {}
+
+	setmetatable(instance, {__index=self})
+	instance:init(...)
+
+	return instance
 end

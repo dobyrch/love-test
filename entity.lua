@@ -1,14 +1,11 @@
 Entity = subclass(Object)
 
 
-function Entity:new()
-	local instance = self:inherit()
-
-	instance.dir = 'down'
-	instance.time = 0
-	instance.tmp = {}
-
-	return instance
+function Entity:init()
+	self:inherit()
+	self.dir = 'down'
+	self.time = 0
+	self.tmp = {}
 end
 
 

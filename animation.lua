@@ -1,28 +1,28 @@
 Animation = subclass(Object, {images={}})
 
 
-function Animation:new(filename)
-	local instance = self:inherit()
-	instance.down = {}
-	instance.up = {}
-	instance.right = {}
-	instance.left = {}
-	instance.frame = 1
+function Animation:init(filename)
+	self:inherit()
+	self.down = {}
+	self.up = {}
+	self.right = {}
+	self.left = {}
+	self.frame = 1
 
 	if self.images[filename] then
-		instance.image = self.images[filename]
+		self.image = self.images[filename]
 	else
-		instance.image = love.graphics.newImage('assets/' .. filename)
-		instance.image:setFilter('linear', 'nearest')
-		self.images[filename] = instance.image
+		self.image = love.graphics.newImage('assets/' .. filename)
+		self.image:setFilter('linear', 'nearest')
+		self.images[filename] = self.image
 	end
 
 	local dir = {'down', 'up', 'right', 'left'}
-	local width, height = instance.image:getDimensions()
+	local width, height = self.image:getDimensions()
 
 	for i = 1, height/TS do
 		for j = 1, width/TS do
-			table.insert(instance[dir[i]],
+			table.insert(self[dir[i]],
 				love.graphics.newQuad(
 					(j - 1)*TS, (i - 1)*TS,
 					TS, TS,
@@ -31,8 +31,6 @@ function Animation:new(filename)
 			)
 		end
 	end
-
-	return instance
 end
 
 
