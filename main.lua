@@ -8,16 +8,17 @@ function love.load(arg)
 end
 
 
+local walk_keys = {
+	e = true, up = true,
+	d = true, down = true,
+	f = true, right = true,
+	s = true, left = true,
+}
+
 function love.keypressed(key, scancode, isrepeat)
 	if key == 'escape' then
 		love.event.quit()
-	elseif key == 'up' or key == 'e' then
-		player:setAction('walk')
-	elseif key == 'down' or key == 'd' then
-		player:setAction('walk')
-	elseif key == 'right' or key == 'f' then
-		player:setAction('walk')
-	elseif key == 'left' or key == 's' then
+	elseif walk_keys[key] and player.action == 'walk' then
 		player:setAction('walk')
 	elseif key == 'space' or key == 'k' then
 		player:setAction('swing')
@@ -28,13 +29,7 @@ end
 function love.keyreleased(key, scancode)
 	if key == 'escape' then
 		love.event.quit()
-	elseif key == 'up' or key == 'e' then
-		player:setAction('walk')
-	elseif key == 'down' or key == 'd' then
-		player:setAction('walk')
-	elseif key == 'right' or key == 'f' then
-		player:setAction('walk')
-	elseif key == 'left' or key == 's' then
+	elseif walk_keys[key] and player.action == 'walk' then
 		player:setAction('walk')
 	end
 end
