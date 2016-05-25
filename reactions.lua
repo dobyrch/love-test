@@ -22,3 +22,10 @@ end
 
 Sword[Solid] = function(sword, sold)
 end
+
+
+Sword[TallGrass] = function(sword, tallgrass)
+	if sword.animation.frame == 3 then
+		tallgrass:remove()
+	end
+end

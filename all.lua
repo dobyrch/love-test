@@ -12,6 +12,8 @@ require 'player'
 require 'sword'
 require 'monster'
 
+require 'tallgrass'
+
 require 'tile'
 require 'solid'
 require 'flower'

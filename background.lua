@@ -52,7 +52,14 @@ function Background:new(map, x, y)
 	instance.distance = 0
 	instance.scrolling = false
 
-	local textmap = require(string.format('maps/%s_%d-%d', map, x, y))
+	local textmap, initmap = unpack(require(string.format(
+		'maps/%s_%d-%d', map, x, y
+	)))
+
+	if initmap then
+		initmap()
+	end
+
 	textmap = textmap:gsub('\n', '')
 
 	local row, col = 0, 0
@@ -86,9 +93,9 @@ end
 
 function Background:update(dt)
 	-- TODO: Store only one instance of each tile; update each once
-	for i = 1, GH do
-		for j = 1, GW do
-			local scheduler = self.tiles[i][j].scheduler
+	for j = 1, GH do
+		for i = 1, GW do
+			local scheduler = self.tiles[j][i].scheduler
 			if scheduler then
 				scheduler:update(dt)
 			end
@@ -108,21 +115,21 @@ end
 
 
 function Background:collide(e)
-	local i = math.ceil(e.y / TS)
-	local j = math.ceil(e.x / TS)
+	local i = math.floor(e.x / TS) + 1
+	local j = math.floor(e.y / TS) + 1
 
-	for i = math.max(i, 1), math.min(i+1, GH) do
-		for j = math.max(j, 1), math.min(j+1, GW) do
-			e:collide(self.tiles[i][j])
+	for j = math.max(j, 1), math.min(j+1, GH) do
+		for i = math.max(i, 1), math.min(i+1, GW) do
+			e:collide(self.tiles[j][i])
 		end
 	end
 end
 
 
 function Background:draw()
-	for i = 1, GH do
-		for j = 1, GW do
-			local tile = self.tiles[i][j]
+	for j = 1, GH do
+		for i = 1, GW do
+			local tile = self.tiles[j][i]
 			local image, quad = tile.animation:getFrame()
 			love.graphics.draw(image, quad,
 				tile.x - self.dx*self.distance,

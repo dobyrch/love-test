@@ -1,17 +1,17 @@
 Static = subclass(Entity, {instances={}})
 
 
-function Static:new(x, y)
+function Static:new(i, j)
 	local instance = self:inherit()
-	instance.x = x
-	instance.y = y
 
-	local i, j
-	i = math.floor(x / TS)
-	j = math.floor(y / TS)
-
+	instance.i = i
+	instance.j = j
+	instance.x = (i - 1)*TS
+	instance.y = (j - 1)*TS
 
 	local coords = i .. ',' .. j
+	instance.coords = coords
+
 	if self.instances[coords] then
 		table.insert(self.instances[coords], instance)
 	else
@@ -19,6 +19,18 @@ function Static:new(x, y)
 	end
 
 	return instance
+end
+
+
+function Static:remove()
+	local instances = self.instances[self.coords]
+
+	for i, v in ipairs(instances) do
+		if v == self then
+			table.remove(instances, i)
+			break
+		end
+	end
 end
 
 
@@ -51,8 +63,8 @@ end
 
 
 function Static:iterNear(other)
-	local i = math.floor(other.x / TS)
-	local j = math.floor(other.y / TS)
+	local i = math.floor(other.x / TS) + 1
+	local j = math.floor(other.y / TS) + 1
 	local nearby = {}
 	local coords
 
