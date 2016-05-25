@@ -14,6 +14,7 @@ require 'monster'
 
 require 'tile'
 require 'solid'
+require 'flower'
 
 require 'animation'
 require 'background'

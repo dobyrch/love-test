@@ -37,6 +37,7 @@ local types = {
 	tree_topleft = Solid,
 	tree_topright = Solid,
 	window = Solid,
+	flower = Flower,
 }
 
 
@@ -58,17 +59,7 @@ function Background:new(map, x, y)
 	textmap:gsub('..',
 		function(t)
 			local tilename = palette[t]
-			local tile = (types[tilename] or Tile):new()
-
-			tile.animation = Animation:new(tilename .. '.png')
-
-			if t == '**' then
-				tile.scheduler = Scheduler:new(
-					{0.4},
-					{function() tile.animation:nextFrame() end},
-					true
-				)
-			end
+			local tile = (types[tilename] or Tile):new(tilename)
 
 			col = col % GW + 1
 			if col == 1 then
