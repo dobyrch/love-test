@@ -95,6 +95,14 @@ end
 
 function Background:update(dt)
 	-- TODO: Store only one instance of each tile; update each once
+	for i = 1, GH do
+		for j = 1, GW do
+			local scheduler = self.tiles[i][j].scheduler
+			if scheduler then
+				scheduler:update(dt)
+			end
+		end
+	end
 
 	if self.scrolling then
 		self.distance = self.distance + dt*self.speed
