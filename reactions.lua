@@ -8,14 +8,14 @@ Monster[Sword] = function(monster, sword)
 end
 
 
-Kinetic[Solid] = function(player, solid)
+Kinetic[Solid] = function(kinetic, solid)
 	local dx, dy
 
-	while player:intersects(solid) do
-		dx, dy = player:normal(solid)
+	while kinetic:intersects(solid) do
+		dx, dy = kinetic:normal(solid)
 
-		player.x = player.x + dx*IOTA
-		player.y = player.y + dy*IOTA
+		kinetic.x = kinetic.x + dx*IOTA
+		kinetic.y = kinetic.y + dy*IOTA
 	end
 end
 

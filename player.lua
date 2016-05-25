@@ -9,6 +9,7 @@ function Player:new()
 	instance.speed = 60
 	instance:setAction('walk')
 	instance.xbuf = 3
+	instance.ybuf = 2
 	return instance
 end
 
@@ -28,22 +29,22 @@ function Player:swing(dt)
 		local xtab, ytab
 		xtab = {down = -1, up = 1, right = 0, left = 0}
 		ytab = {down = 0, up = 0, right = -1, left = -1}
-		sword.x = sword.x + xtab[sword.dir]*self.width
-		sword.y = sword.y + ytab[sword.dir]*self.width
+		sword.x = sword.x + xtab[sword.dir]*TS
+		sword.y = sword.y + ytab[sword.dir]*TS
 
 		function one()
 			xtab = {down = 0, up = 0, right = 1, left = -1}
 			ytab = {down = 1, up = -1, right = 0, left = 0}
-			sword.x = sword.x + xtab[sword.dir]*self.width
-			sword.y = sword.y + ytab[sword.dir]*self.width
+			sword.x = sword.x + xtab[sword.dir]*TS
+			sword.y = sword.y + ytab[sword.dir]*TS
 			sword.animation:nextFrame()
 		end
 
 		function two()
 			xtab = {down = 1, up = -1, right = 0, left = 0}
 			ytab = {down = 0, up = 0, right = 1, left = 1}
-			sword.x = sword.x + xtab[sword.dir]*self.width
-			sword.y = sword.y + ytab[sword.dir]*self.width
+			sword.x = sword.x + xtab[sword.dir]*TS
+			sword.y = sword.y + ytab[sword.dir]*TS
 
 			if sword.dir == 'left' or sword.dir == 'right' then
 				sword.y = sword.y + 4

@@ -76,6 +76,8 @@ function Background:new(map, x, y)
 				instance.tiles[row] = {}
 			end
 
+			tile.x = (col - 1)*TS
+			tile.y = (row - 1)*TS
 			instance.tiles[row][col] = tile
 		end
 	)
@@ -106,14 +108,26 @@ function Background:update(dt)
 end
 
 
+function Background:collide(e)
+	local i = math.ceil(e.y / TS)
+	local j = math.ceil(e.x / TS)
+
+	for i = math.max(i, 1), math.min(i+1, GH) do
+		for j = math.max(j, 1), math.min(j+1, GW) do
+			e:collide(self.tiles[i][j])
+		end
+	end
+end
+
+
 function Background:draw()
 	for i = 1, GH do
 		for j = 1, GW do
 			local tile = self.tiles[i][j]
 			local image, quad = tile.animation:getFrame()
 			love.graphics.draw(image, quad,
-				(j - 1)*TS - self.dx*self.distance,
-				(i - 1)*TS - self.dy*self.distance
+				tile.x - self.dx*self.distance,
+				tile.y - self.dy*self.distance
 			)
 
 		end

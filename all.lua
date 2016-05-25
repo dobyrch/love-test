@@ -4,11 +4,6 @@ require 'util'
 require 'subclass'
 require 'object'
 
-require 'animation'
-require 'background'
-require 'effect'
-require 'scheduler'
-
 require 'entity'
 require 'kinetic'
 require 'static'
@@ -19,5 +14,10 @@ require 'monster'
 
 require 'tile'
 require 'solid'
+
+require 'animation'
+require 'background'
+require 'effect'
+require 'scheduler'
 
 require 'reactions'

@@ -5,8 +5,8 @@ function Monster:new()
 	local instance
 	instance = self:inherit()
 	instance.animation = Animation:new('octorok.png')
-	instance.x = 112
-	instance.y = 112
+	instance.x = 16
+	instance.y = 48
 	instance.speed = 30
 	instance:setAction('walk')
 	return instance

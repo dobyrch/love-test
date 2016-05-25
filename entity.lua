@@ -4,8 +4,6 @@ Entity = subclass(Object)
 function Entity:new()
 	local instance = self:inherit()
 
-	instance.width = TS
-	instance.height = TS
 	instance.dir = 'down'
 	instance.time = 0
 	instance.tmp = {}
@@ -28,7 +26,7 @@ end
 
 
 function Entity:center()
-	return self.x + self.width/2, self.y + self.height/2
+	return self.x + TS/2, self.y + TS/2
 end
 
 
@@ -38,10 +36,10 @@ function Entity:intersects(other)
 	local ybuf = (self.ybuf or 0) + (other.ybuf or 0)
 
 	return not (
-		self.x > other.x + other.width - xbuf or
-		other.x > self.x + self.width - xbuf or
-		self.y > other.y + other.height - ybuf or
-		other.y > self.y + self.height - ybuf
+		self.x > other.x + TS - xbuf or
+		other.x > self.x + TS - xbuf or
+		self.y > other.y + TS - ybuf or
+		other.y > self.y + TS - ybuf
 	)
 end
 

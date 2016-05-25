@@ -84,6 +84,8 @@ function love.update(dt)
 				e1:collide(e2)
 			end
 		end
+
+		background:collide(e1)
 	end
 end
 
