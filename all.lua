@@ -19,7 +19,7 @@ require 'solid'
 require 'flower'
 
 require 'animation'
-require 'background'
+require 'mapchunk'
 require 'effect'
 require 'scheduler'
 

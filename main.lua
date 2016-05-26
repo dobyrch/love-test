@@ -2,7 +2,7 @@ require 'all'
 
 
 function love.load(arg)
-	background = Background:new('overworld', 1, 1)
+	mapchunk = MapChunk:new('overworld', 1, 1)
 	player = Player:new()
 	monster = Monster:new()
 end
@@ -36,16 +36,16 @@ end
 
 
 function love.update(dt)
-	background:update(dt)
+	mapchunk:update(dt)
 
-	if background.scrolling then
+	if mapchunk.scrolling then
 		for e in pairs(Kinetic.instances) do
-			e.x = e.x - background.dx*background.speed*dt
-			e.y = e.y - background.dy*background.speed*dt
+			e.x = e.x - mapchunk.dx*mapchunk.speed*dt
+			e.y = e.y - mapchunk.dy*mapchunk.speed*dt
 
 			if e == player then
-				e.x = e.x + background.dx*22*dt
-				e.y = e.y + background.dy*22*dt
+				e.x = e.x + mapchunk.dx*22*dt
+				e.y = e.y + mapchunk.dy*22*dt
 			end
 		end
 
@@ -54,7 +54,7 @@ function love.update(dt)
 
 	local outdir = player:outOfBounds()
 	if outdir then
-		background:scroll(outdir)
+		mapchunk:scroll(outdir)
 	end
 
 	-- Update position and animation of each entity
@@ -80,7 +80,7 @@ function love.update(dt)
 			end
 		end
 
-		background:collide(e1)
+		mapchunk:collide(e1)
 	end
 end
 
@@ -89,7 +89,7 @@ function love.draw()
 	-- TODO: Scale appropriately based on resolution
 	love.graphics.scale(4, 4)
 
-	background:draw()
+	mapchunk:draw()
 
 	for e in Static:iterAll() do
 		e:draw()

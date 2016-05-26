@@ -1,4 +1,4 @@
-Background = subclass(Object, {speed=200})
+MapChunk = subclass(Object, {speed=200})
 
 local palette = {
 	['**'] = 'flower',
@@ -41,7 +41,7 @@ local types = {
 }
 
 
-function Background:init(map, x, y)
+function MapChunk:init(map, x, y)
 	self:inherit()
 	self.tiles = {}
 	self.map = map
@@ -82,15 +82,15 @@ function Background:init(map, x, y)
 end
 
 
-function Background:scroll(dir)
+function MapChunk:scroll(dir)
 	self.dx, self.dy = util.dirVector(dir)
-	self.nextmap = Background:new(self.map, self.x + self.dx, self.y + self.dy)
+	self.nextmap = MapChunk:new(self.map, self.x + self.dx, self.y + self.dy)
 	self.canvas = love.graphics.newCanvas(SW, SH)
 	self.scrolling = true
 end
 
 
-function Background:update(dt)
+function MapChunk:update(dt)
 	-- TODO: Store only one instance of each tile; update each once
 	for j = 1, GH do
 		for i = 1, GW do
@@ -113,7 +113,7 @@ function Background:update(dt)
 end
 
 
-function Background:collide(e)
+function MapChunk:collide(e)
 	local i = math.floor(e.x / TS) + 1
 	local j = math.floor(e.y / TS) + 1
 
@@ -125,7 +125,7 @@ function Background:collide(e)
 end
 
 
-function Background:draw()
+function MapChunk:draw()
 	for j = 1, GH do
 		for i = 1, GW do
 			local tile = self.tiles[j][i]
