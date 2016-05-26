@@ -83,9 +83,31 @@ end
 
 
 function MapChunk:scroll(dir)
+	local statics = Static.instances
+	local kinetics = Kinetic.instances
+
+	Static.instances = {}
+	Kinetic.instances = {}
+
 	self.dx, self.dy = util.dirVector(dir)
 	self.nextmap = MapChunk:new(self.map, self.x + self.dx, self.y + self.dy)
 	self.canvas = love.graphics.newCanvas(SW, SH)
+	love.graphics.setCanvas(self.canvas)
+
+	self.nextmap:draw()
+
+	for e in Static:iterAll() do
+		e:draw()
+	end
+
+	for e in pairs(Kinetic.instances) do
+		e:draw()
+	end
+
+	love.graphics.setCanvas()
+	Static.instances = statics
+	Kinetic.instances = kinetics
+
 	self.scrolling = true
 end
 
@@ -139,10 +161,6 @@ function MapChunk:draw()
 	end
 
 	if self.nextmap then
-		love.graphics.setCanvas(self.canvas)
-		self.nextmap:draw()
-		love.graphics.setCanvas()
-
 		love.graphics.draw(self.canvas,
 			(WW - self.distance)*self.dx,
 			(WH - self.distance)*self.dy,

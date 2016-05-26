@@ -38,6 +38,7 @@ end
 function love.update(dt)
 	mapchunk:update(dt)
 
+	-- TODO: Handle entity scrolling in MapChunk?
 	if mapchunk.scrolling then
 		for e in pairs(Kinetic.instances) do
 			e.x = e.x - mapchunk.dx*mapchunk.speed*dt
@@ -47,6 +48,11 @@ function love.update(dt)
 				e.x = e.x + mapchunk.dx*22*dt
 				e.y = e.y + mapchunk.dy*22*dt
 			end
+		end
+
+		for e in Static:iterAll() do
+			e.x = e.x - mapchunk.dx*mapchunk.speed*dt
+			e.y = e.y - mapchunk.dy*mapchunk.speed*dt
 		end
 
 		return
