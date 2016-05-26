@@ -4,7 +4,6 @@ require 'all'
 function love.load(arg)
 	mapchunk = MapChunk:new('overworld', 1, 1)
 	player = Player:new()
-	monster = Monster:new()
 end
 
 

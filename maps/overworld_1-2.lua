@@ -9,6 +9,11 @@ return {
    |##xxxxxxxxxx##| 
   **##############|_
 ^><^^><^^><^^><^^><^
-]]
+]],
+
+
+function()
+	Monster:new()
+end
 
 }
