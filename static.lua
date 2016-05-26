@@ -1,4 +1,4 @@
-Static = subclass(Entity, {instances={}})
+Static = Entity:subclass{instances={}}
 
 
 function Static:init(i, j)

@@ -1,7 +1,6 @@
 require 'const'
 require 'util'
 
-require 'subclass'
 require 'object'
 
 require 'entity'

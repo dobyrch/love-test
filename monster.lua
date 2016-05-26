@@ -1,4 +1,4 @@
-Monster = subclass(Kinetic)
+Monster = Kinetic:subclass()
 
 
 function Monster:init()

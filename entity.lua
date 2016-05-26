@@ -1,4 +1,4 @@
-Entity = subclass(Object)
+Entity = Object:subclass()
 
 
 function Entity:init()
@@ -71,11 +71,11 @@ end
 --       Might also be more appropriate to call it 'react' or 'resolve'
 function Entity:collide(other)
 	local react
-	local class = other:super()
+	local class = other:superclass()
 
 	while not react and class do
 		react = self[class]
-		class = class:super()
+		class = class:superclass()
 	end
 
 	if react then

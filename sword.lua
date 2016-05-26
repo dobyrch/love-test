@@ -1,4 +1,4 @@
-Sword = subclass(Kinetic)
+Sword = Kinetic:subclass()
 
 
 function Sword:init()

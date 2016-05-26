@@ -1,4 +1,4 @@
-TallGrass = subclass(Static)
+TallGrass = Static:subclass()
 
 
 function TallGrass:init(x, y)

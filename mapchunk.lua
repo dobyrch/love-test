@@ -1,4 +1,4 @@
-MapChunk = subclass(Object, {speed=200})
+MapChunk = Object:subclass{speed=200}
 
 local palette = {
 	['**'] = 'flower',

@@ -1,4 +1,4 @@
-Player = subclass(Kinetic)
+Player = Kinetic:subclass()
 
 
 function Player:init()

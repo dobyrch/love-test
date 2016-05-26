@@ -1,4 +1,4 @@
-Kinetic = subclass(Entity, {instances={}})
+Kinetic = Entity:subclass{instances={}}
 
 
 function Kinetic:init()

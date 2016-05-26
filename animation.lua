@@ -1,4 +1,4 @@
-Animation = subclass(Object, {images={}})
+Animation = Object:subclass{images={}}
 
 
 function Animation:init(filename)

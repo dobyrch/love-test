@@ -1,4 +1,4 @@
-Flower = subclass(Tile)
+Flower = Tile:subclass()
 
 
 function Flower:init(name)

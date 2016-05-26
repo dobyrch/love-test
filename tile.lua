@@ -1,4 +1,4 @@
-Tile = subclass(Object)
+Tile = Object:subclass()
 
 function Tile:init(name)
 	self:inherit()

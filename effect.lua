@@ -1,4 +1,4 @@
-Effect = subclass(Object)
+Effect = Object:subclass()
 local shaders = {}
 
 

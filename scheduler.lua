@@ -1,4 +1,4 @@
-Scheduler = subclass(Object)
+Scheduler = Object:subclass()
 
 
 -- TODO: Accept (num, func, bool) in addtion to (table, table, bool)

@@ -1,1 +1,1 @@
-Solid = subclass(Tile)
+Solid = Tile:subclass()
