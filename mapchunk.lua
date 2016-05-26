@@ -51,6 +51,7 @@ function MapChunk:init(map, x, y)
 	self.dy = 0
 	self.distance = 0
 	self.scrolling = false
+	self.nextmap = false
 
 	local textmap, initmap = unpack(require(string.format(
 		'maps/%s_%d-%d', map, x, y
@@ -91,6 +92,7 @@ function MapChunk:scroll(dir)
 
 	self.dx, self.dy = util.dirVector(dir)
 	self.nextmap = MapChunk:new(self.map, self.x + self.dx, self.y + self.dy)
+
 	self.canvas = love.graphics.newCanvas(SW, SH)
 	love.graphics.setCanvas(self.canvas)
 
@@ -105,6 +107,8 @@ function MapChunk:scroll(dir)
 	end
 
 	love.graphics.setCanvas()
+	self.nextmap.statics = Static.instances
+	self.nextmap.kinetics = Kinetic.instances
 	Static.instances = statics
 	Kinetic.instances = kinetics
 
@@ -130,6 +134,11 @@ function MapChunk:update(dt)
 			for k, v in pairs(self.nextmap) do
 				self[k] = v
 			end
+
+			Static.instances = self.statics
+			Kinetic.instances = self.kinetics
+			-- TODO: Don't access player as global
+			Kinetic.instances[player] = true
 		end
 	end
 end
